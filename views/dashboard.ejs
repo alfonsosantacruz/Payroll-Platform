@@ -8,7 +8,7 @@
 </head>
 <body>
 	 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">
+		<a class="navbar-brand" href="/submissions">
 		    <img src="/img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
 		    Work Study Portal
 		 </a>
@@ -16,13 +16,13 @@
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
 	      <li class="nav-item active">
-	        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+	        <a class="nav-link" href="/submissions">Home <span class="sr-only">(current)</span></a>
 	      </li>
 	      <li class="nav-item active">
-	        <a class="nav-link" href="#">Calendar <span class="sr-only">(current)</span></a>
+	        <a class="nav-link" href="/schedule">Calendar <span class="sr-only">(current)</span></a>
 	      </li>
 	      <li class="nav-item active">
-	        <a class="nav-link" href="#">FAQ <span class="sr-only">(current)</span></a>
+	        <a class="nav-link" href="https://docs.google.com/document/d/1xr0DPjpI0h8l4860m3gfEvtXTbWprNV4NnGYCjbaAOc/edit?usp=sharing" target="_blank">FAQ <span class="sr-only">(current)</span></a>
 	      </li>
 	      <li class="nav-item active">
 	        <a class="nav-link" href="#">Settings <span class="sr-only">(current)</span></a>
@@ -55,7 +55,9 @@
 					<div id="ppdiv" class="col-md-12 border border dark">
 						<div id = "pptitle" class="p-2 col-md-12">
 							<%if(submission.ppClosed == false && submission.approved == false){%>
-								<div class="d-flex flex-row-reverse"><i class="fas fa-edit"></i></div>
+								<form action="/edit" method="POST">
+									<div class="d-flex flex-row-reverse"><input type="text" name="subId" hidden value="<%=submission.id%>"><button type="submit" class="fas fa-edit"></button></div>
+								</form>
 							<%};%>
 							<a name="pp" class="p-1"><strong><%=submission.pp%> (Saturday/06/13/2020 - Friday/06/26/2020)</strong></a>
 						</div>
@@ -96,29 +98,30 @@
 										</div>
 									</form>
 								<%} else {%>
-									<form class="form-inline align-items-stretch" action="/submission" method="POST">
+									<form class="form-inline align-items-stretch" action="/report" method="POST">
 										<div class="col-md-4 form-column">
 											<div class="form-group mb-1">
 										      <label class="my-1 mr-2" for="week1">Week 1 (06/13 - 06/19)</label>
-										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" id="week1" value="0" required>
+										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" id="week1" value="<%=submission.week1%>" required>
 										    </div>
 										    <div class="form-group mb-1">
 										      <label class="my-1 mr-2" for="week2">Week 2 (06/20 - 06/26)</label>
-										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" id="week2" value="0" required>
+										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" id="week2" value="<%=submission.week2%>" required>
 										    </div>
 										    <div class="form-group mb-1">
 										      <label class="my-1 mr-2" for="missed">Forgot to submit</label>
-										      <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" id="missed" value="0" required>
+										      <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" id="missed" value="<%=submission.missed%>" required>
 										    </div>
 										    <div class="p-3 form-group mb-1">
 										      <label class="my-1 mr-2" name="total" for="Total">Total</label>
-										      <a id="total"></a>
+										      <a name="total" id="total"></a>
 										    </div>
 										</div>
 										<div class="col-md-8 form-column">
 											<div class="flex-column">
 										      	<label class="p-1 align-self-start" for="justification">Justification/Tasks Developed</label>
-												<textarea class="p-2 flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required></textarea>
+												<textarea class="p-2 flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
+												<input type="text" name="subId" hidden value="<%=submission.id%>">
 												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
 										    		<button type="submit" id="submit" class="align-self-end btn btn-success">Submit</button>
 								    			</div>
