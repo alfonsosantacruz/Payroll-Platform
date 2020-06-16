@@ -5,7 +5,7 @@ var internSchema = mongoose.Schema({
 	name: String,
 	role: String,
 	manager: String,
-	managerEmail: String
+	managerEmail: String,
 	submissions: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
@@ -13,7 +13,8 @@ var internSchema = mongoose.Schema({
 		}
 	],
 	totalHours: Number,
-	average: Number
+	average: Number,
+	activeStatus: Boolean
 });
 
 module.exports = mongoose.model("Intern", internSchema);
