@@ -1,0 +1,83 @@
+<html lang="en">
+  <head>
+    <title>Work Study Portal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel='stylesheet' type='text/css' href="../static/login.css">
+    <link href="../static/fontawesome-free-5.13.0-web/css/all.css" rel="stylesheet"> <!--load all styles -->
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6350032/630642/css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="../static/typography-font.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <!-- <meta name="google-signin-client_id" content="349486866506-e9shci6isoh7fv46l0jcblmvg1k9g0hg.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script type="text/javascript">
+      function onSignIn(googleUser) {
+        var id_token = googleUser.getAuthResponse().id_token;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/login');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+          console.log('Signed in as: ' + xhr.responseText);
+        };
+        xhr.send('idtoken=' + id_token);
+      }
+    </script> -->
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+        <img src="../img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+        Work Study Portal
+     </a>
+    </nav>
+
+
+    <div class="wrapper">
+      <div class="row-fluid">
+      </div>
+
+      <div class="row" id="login-alert">
+        <div class="col-sm-3 col-md-3 col-lg-3 offset-sm-4 offset-md-4 offset-lg-4">
+          <form action="/auth/google" method="GET" id="google-signin"></form>
+
+          <div class="col card mb-3">
+            <div class="card-body">
+              <h2 class="card-title">
+                Sign in to Minerva
+              </h2>
+              <div class="card-text"> <!-- g-signin2" data-onsuccess="onSignIn"> -->
+                  <button id="signinButton" form="google-signin">
+                     <img src="../img/btn_google_signin_light_focus_web@2x.png"/>
+                  </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row" id="error-message">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <BR>
+          <div class="alert alert-danger text-center" id="message-text" role="alert"></div>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+
+    <div class="content-wrapper"></div>
+
+    <footer class="footer">
+      <div>
+        Copyright © Minerva Project, Inc. All Rights Reserved.&nbsp;&nbsp;&nbsp;
+      </div>
+      <div>
+        <a id="mp-footer-terms" href="https://minerva.kgi.edu/terms/">Terms and Conditions</a> • <a id="mp-footer-privacy" href="https://minerva.kgi.edu/privacy/">Privacy Policy</a>
+      </div>
+    </footer>
+
+  </body>
+</html>
