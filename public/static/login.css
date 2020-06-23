@@ -1,0 +1,381 @@
+.content-container {
+  display:none;
+}
+.authenticated .content-container {
+  display:flex;
+}
+
+
+@font-face {
+    font-family: 'acumin-pro', sans-serif;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    font-family: 'acumin-pro', sans-serif;
+    font-size:14px;
+    background-color: #f2f2f2 !important;
+    margin-bottom: 85px !important;
+}
+
+body.authenticated {
+  background-color: #FFF !important;
+}.
+
+h1, h2, h3 {
+    font-family: "Chronicle Deck A", serif !important;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+}
+
+h4 {
+  font-family: 'acumin-pro', sans-serif;
+  font-size:16px !important;
+  letter-spacing: -0.02em;
+  font-weight: bold;
+}
+
+.navbar-dark.bg-dark {
+    background-color: #000000 !important;
+}
+
+.navbar-brand {
+    font-family: "Chronicle Deck A", serif;
+}
+.navbar-brand input {
+    margin-right: 5px;
+}
+input.user-avatar {
+    display: none;
+    border-radius: 36px;
+    height: 36px;
+    width: 36px;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+.navbar-nav a {
+    color: #95a0a6 !important;
+}
+nav.navbar {
+    padding: 0 6px;
+    height: 52px;
+}
+.dropdown-toggle::after {
+    display: none !important;
+    border:none !important;
+    margin: none  !important;
+}
+
+/*
+.button-container #signinButton {
+    width: 225px;
+    padding: 4px;
+    margin: 0px;
+}
+*/
+
+
+.content-container a {
+  color: #4486B0 !important;
+}
+
+a {
+  color: #0088CC;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  font-size: 14px;
+}
+
+h2 {
+  font-weight: 200;
+  margin-bottom: 5px;
+  /*color: #00abc7;*/
+  font-size: 36px;
+}
+
+h2.card-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+h3 {
+  font-weight:300;
+  font-size: 24px;
+  line-height: 28px;
+  /*color: #00abc7;*/
+}
+
+h4 {
+  /*color: #e65c47;*/
+  font-weight: 300;
+}
+
+#login-alert .button-container,
+#login-alert .button-container #signinButton {
+  width: 100%;
+}
+
+.col.card {
+    padding: 15px 0 0 0;
+    border-bottom: 2px solid #ccc;
+    min-width: 300px;
+}
+
+.button-container {
+    padding-left: 0px !important;
+    margin-left: 0px !important;
+}
+.button-container .btn {
+    color: #333;
+    background-color: #FFF;
+    margin-top:10px;
+    font-size: 13px;
+    /*width: 150px;*/
+    padding: 10px 30px;
+    border: 3px solid #AAA;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    margin-bottom: 15px;
+}
+
+.button-container {
+    color: #fff;
+/*
+    border: 2px solid #EC651C;
+    background-color: #EC651C;
+*/
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    margin-bottom: 15px;
+}
+
+.container {
+  /*width: 80%;*/
+  /*max-width: 1024px;*/
+  margin: 15% auto;
+}
+
+.content-wrapper {
+/*
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+*/
+  background-color: #FFFFFF;
+}
+
+.sign-in-buttons {
+  text-align: center;
+}
+
+.hero-unit {
+  margin-top:30px;
+  padding: 20px 40px;
+  line-height: 18px;
+}
+
+.footer {
+  position: absolute;
+  height: 65px;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  color: #999;
+  font-family: 'acumin-pro';
+  font-size: 16px;
+}
+
+.footer-links {
+  margin: 10px 0;
+}
+
+.footer-links li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.footer a {
+  color: #999;
+  font-size: 16px;
+}
+
+.footer div {
+  display: inline-block;
+}
+
+.widenIcon {
+  margin: -3px 0px 0px 4px;
+}
+
+.minerva-logo {
+  width:211px;
+  height:44px;
+}
+
+body {
+  padding:0px;
+}
+
+.navbar-brand {
+  padding:3px 10px;
+}
+
+#user-name-dropdown {
+  display:none;
+}
+/*
+#signinButton {
+  display:none;
+  position: fixed;
+  right: 7px;
+  top: 0px;
+}
+*/
+
+#signinButton {
+  width: 100%;
+  background-color: #FFF;
+  border: 3px solid #AAA;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+#signinButton input {
+  width: 100%;
+  height: 100%;
+}
+
+#error-message {
+  display:none;
+}
+
+#login-alert {
+  display:block;
+  margin: 15% auto;
+}
+
+.user-avatar {
+  width: 30px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.signin-button {
+  margin-bottom: 20px;
+  display:block;
+}
+
+.signin-btn-header {
+  margin-top:8px;
+}
+
+.link {
+  /*font-weight:bold;*/
+}
+
+input.screenshot {
+  /*width:155px;*/
+  border:1px solid #999;
+  margin:15px 5px;
+}
+input.vertical {
+  height:200px;
+  width:155px;
+}
+input.horiz {
+  width:155px;
+  height:120px;
+}
+
+.shadow {
+  -moz-box-shadow:    5px 5px 6px -4px #ccc;
+  -webkit-box-shadow: 5px 5px 6px -4px #ccc;
+  box-shadow:         5px 5px 6px -4px #ccc;
+}
+
+.row {
+  margin-right:0px;
+  margin-left:0px;
+}
+
+.transcript-details {
+  display:none;
+  padding:0 25px;
+}
+
+.loading-spinner {
+  width:15px;
+  height:15px;
+}
+
+.unofficial-transcript-li, .schedule-div {
+  display:none;
+}
+
+#modal-iframe {
+  width:500px;
+  height:500px;
+}
+
+#hero {
+  background-color: #2B2621;
+  background-image: url('/input/hero_registrar_slice.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 300px;
+  margin-left: 0px;
+  margin-right: 0px;
+  background-position: right;
+  padding-top: 190px;
+  margin-bottom: 25px;
+}
+
+#hero h2 {
+  border-top: 1px solid #FFF;
+  color: #FFF;
+  padding-top: 15px;
+  font-weight: bold;
+}
+
+#hero .container,
+#main-section.container {
+  margin-top: 0px;
+}
+
+.content-container h3 {
+  border-top: 1px solid #000;
+  color: #000;
+  padding-top: 25px;
+  padding-bottom: 10px;
+  margin-top: 30px;
+  font-weight: bold;
+}
+
+.content-container h4 {
+  padding-top: 10px;
+  font-weight: bold;
+}
+
+.content-container ul {
+  margin-left: -18px;
+  font-size: 14px;
+}
