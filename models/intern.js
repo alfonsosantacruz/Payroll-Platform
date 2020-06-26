@@ -14,7 +14,9 @@ var internSchema = mongoose.Schema({
 	],
 	totalHours: Number,
 	average: Number,
-	activeStatus: Boolean
+	activeStatus: Boolean,
+	imagePath: String
 });
+
 
 module.exports = mongoose.model("Intern", internSchema);
