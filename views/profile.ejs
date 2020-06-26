@@ -1,0 +1,156 @@
+<html>
+<head>
+	<title>WS_Portal</title>
+	<base href="/">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type='text/css' href="static/static.css">
+    <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark navbar-fixed-top">
+		<a class="navbar-brand" href="/">
+		    <img src="/img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
+		    Work Study Portal
+		 </a>
+
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    <ul class="navbar-nav mr-auto">
+		    <li class="nav-item active">
+		    	<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+		    </li>
+		    <li class="nav-item active">
+		        <a class="nav-link" href="/schedule">Calendar <span class="sr-only">(current)</span></a>
+		    </li>
+		    <li class="nav-item active">
+		    	<a class="nav-link" href="https://docs.google.com/document/d/1xr0DPjpI0h8l4860m3gfEvtXTbWprNV4NnGYCjbaAOc/edit?usp=sharing" target="_blank">FAQ <span class="sr-only">(current)</span></a>
+		    </li>
+		    <li class="nav-item active">
+		    	<a class="nav-link" href="/directory">Directory <span class="sr-only">(current)</span></a>
+		    </li>
+		    <li class="nav-item dropdown">
+	          	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Pay Period</a>
+	        	<div class="dropdown-menu">
+	        		<%manager.payPeriodsAvailable.forEach(function(pp, index){%>
+	        			<a class="dropdown-item" href="/home/<%=pp%>"><%=pp%></a>
+	        		<%});%>
+	          	</div>
+	        </li>
+	    </ul>
+	    <form class="form-inline my-2 my-lg-0" action="/logout" method="GET">
+	      	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign out</button>
+	    </form>
+	  </div>
+	</nav>
+
+	<div class="d-flex p-4 row">
+		<div class="p-2 col-md-2 border border dark">
+			<div class="d-flex justify-content-center p-2 bd-highlight"><img src="<%=user.imagePath%>" id = "profile_picture" class="d-inline-block align-top" alt="" loading="lazy"></div>
+			<div class="d-flex justify-content-center p-3 bd-highlight" id = "full_name"><a><strong><%=user.name%></strong></a></div>
+			<hr id = "profile_split">
+			<div class="d-flex justify-content-center p-2 bd-highlight" id = "Stats title"><a><strong>Info & Stats</strong></a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Role:</strong> <%=user.role%><a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager:</strong> <%=user.manager%></a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager Email:</strong> <%=user.managerEmail%></a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Total Hours:</strong> <%=user.totalHours%></a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Average:</strong> <%=user.average%></a></div>
+		</div>
+
+		<!-- Cards Container-->
+		<div class="row col-md-10">
+			<!-- Starts new card-->
+			<%submission.forEach(function(submission){%>
+				<!-- Starts new card-->
+				<div class="p-1 col-md-6">
+					<div id="ppdiv" class="col-md-12 border border dark">
+						<div id = "pptitle" class="p-2 col-md-12">
+							<%if(submission.approvalClosed == false && submission.approved == true){%>
+								<form action="/editByManager" method="POST">
+									<div class="d-flex flex-row-reverse"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
+								</form>
+							<%};%>
+							<a name="pp" class="p-1"><strong><%=submission.pp%></strong></a>
+						</div>
+						<div class="col-md-12 justify-content-start">
+							<div  class="p-2 col-md-12 d-inline-block align-top flex-column">
+								<%if(submission.approved == true){%>
+									<div class="form-inline align-items-stretch">
+										<div class="col-md-4 form-column">
+											<div class="form-group mb-1">
+										      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
+										      <a id="week1" class="mr-sm-1"><%=submission.week1%> hours<a>
+										    </div>
+										    <div class="form-group mb-1">
+										      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
+										      <a id="week2" class="mr-sm-1"><%=submission.week2%> hours<a>
+										    </div>
+										    <div class="form-group mb-1">
+										      <label class="my-1 mr-2" for="missed"><strong>Forgot to submit</strong></label>
+										      <a id="missed" class="mr-sm-1"><%=submission.missed%> hours<a>
+										    </div>
+										    <div class="p-3 form-group mb-1">
+										      <label class="my-1 mr-2" name="total" for="Total"><strong>Total</strong></label>
+										      <a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hours</a>
+										    </div>
+										</div>
+										<div class="col-md-8 form-column">
+											<div class="flex-column">
+										      	<label class="p-1 align-self-start" for="justification"><strong>Justification/Tasks Developed</strong></label>
+												<p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"> <%=submission.description%><p>
+												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
+													<%if(submission.approved == false){%>
+														<a class="align-self-end" id="dateSubmitted"><strong>Date Submitted:</strong> <%=submission.dateSubmitted%></a>
+													<%} else {%>
+														<a class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></a>
+													<%};%>
+								    			</div>
+										    </div>
+										</div>
+									</div>
+								<%} else {%>
+									<form class="form-inline align-items-stretch" action="/reportByManager" method="POST">
+										<div class="col-md-4 form-column">
+											<div class="form-group mb-1">
+										      <label class="my-1 mr-2" for="week1">Week 1</label>
+										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
+										    </div>
+										    <div class="form-group mb-1">
+										      <label class="my-1 mr-2" for="week2">Week 2</label>
+										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
+										    </div>
+										    <div class="form-group mb-1">
+										      <label class="my-1 mr-2" for="missed">Forgot to submit</label>
+										      <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
+										    </div>
+										    <div class="p-3 form-group mb-1">
+										      <label class="my-1 mr-2" name="total" for="Total">Total</label>
+										      <a name="total" id="total"></a>
+										    </div>
+										</div>
+										<div class="col-md-8 form-column">
+											<div class="flex-column">
+										      	<label class="p-1 align-self-start" for="justification">Justification/Tasks Developed</label>
+												<textarea class="p-2 flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
+												<input type="text" name="subId" hidden value="<%=submission.id%>">
+												<input type="text" name="internId" hidden value="<%=user.id%>">
+												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
+										    		<button type="submit" id="submit" class="align-self-end btn btn-success">Approve</button>
+								    			</div>
+										    </div>
+										</div>
+									</form>
+								<%};%>
+							</div>
+						</div>
+					</div>
+				</div>
+			<%});%>
+		</div>
+	</div>
+	
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script type="text/javascript" src="../js/dashboard.js"></script>
+</body>
+</html>
