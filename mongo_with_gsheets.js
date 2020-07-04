@@ -244,23 +244,3 @@ function closeApproval() {
   UrlFetchApp.fetch('closeApproval', params); // Insert webhook URL
 }
 
-
-
-function getGoogleDocumentAsHTML() {
-  var source = SpreadsheetApp.getActiveSpreadsheet();
-  var databaseSheet = source.getSheetByName('HTML');
-
-  var id = '1xr0DPjpI0h8l4860m3gfEvtXTbWprNV4NnGYCjbaAOc';
-  var forDriveScope = DriveApp.getStorageUsed(); //needed to get Drive Scope requested
-  var url = "https://docs.google.com/feeds/download/documents/export/Export?id="+id+"&exportFormat=html";
-  var param = {
-    method      : "get",
-    headers     : {"Authorization": "Bearer " + ScriptApp.getOAuthToken()},
-    muteHttpExceptions:true,
-  };
-  var html = UrlFetchApp.fetch(url,param).getContentText();
-  
-  databaseSheet.getRange(1, 1).setValue(html);
-  
-  textToColumnsCustom(html, "</head>")
-}
