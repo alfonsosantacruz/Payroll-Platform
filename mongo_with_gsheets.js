@@ -244,3 +244,51 @@ function closeApproval() {
   UrlFetchApp.fetch('closeApproval', params); // Insert webhook URL
 }
 
+
+function reportRaw() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Raw')
+  // var interns = sheet.getDataRange().getValues();
+  var numUsedRows = sheet.getDataRange().getValues().length;
+  
+  var cronsSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Cron');
+  var pp = cronsSheet.getRange(9, 2).getValue().toString();
+  var pp_delayed = cronsSheet.getRange(9, 3).getValue().toString();
+  
+  if (pp == pp_delayed) {
+    // Collects data stored in MongoDB Atlas for interns
+    var formData = {
+      'pp': pp_delayed
+    };
+    
+    var params = {
+    'method': 'post',
+    'payload': formData
+    }; 
+    
+    var webhook_get_subs = 'reportGeneration' // Insert webhook URL
+    var subs_request = UrlFetchApp.fetch(webhook_get_subs, params);
+    var subs = JSON.parse(subs_request);
+    
+    for (var i = 0; i < subs.length; i++) {
+      Logger.log(subs[i][0]);
+      // Logger.log(subs[i][1]);
+      // Logger.log(subs[i][1][0]);
+      // Logger.log(subs[i][1][0]['week1']);
+      
+      var rowNum = numUsedRows + i + 1;
+      
+      sheet.getRange(rowNum, 1).setFormula('=CONCATENATE(C' + rowNum + ', " - ",K' + rowNum + ')');
+      sheet.getRange(rowNum, 2).setFormula('vlookup(C' + rowNum + ',Intern!$B:$J,9,False)');
+      sheet.getRange(rowNum, 4).setFormula('vlookup(C' + rowNum + ',Intern!$B:$J,2,False)');
+      sheet.getRange(rowNum, 3).setValue(subs[i][0]);
+      if (subs[i][1][0]['week1']['$numberInt'] == null) { var week1 = 0 } else { var week1 = subs[i][1][0]['week1']['$numberInt']}
+      sheet.getRange(rowNum, 7).setValue(week1);
+      if (subs[i][1][0]['week2']['$numberInt'] == null) { var week2 = 0 } else { var week2 = subs[i][1][0]['week2']['$numberInt']}
+      sheet.getRange(rowNum, 8).setValue(week2);
+      if (subs[i][1][0]['missed']['$numberInt'] == null) { var missed = 0 } else { var missed = subs[i][1][0]['missed']['$numberInt']}
+      sheet.getRange(rowNum, 9).setValue(missed);
+      sheet.getRange(rowNum, 10).setValue(subs[i][1][0]['description']);
+      sheet.getRange(rowNum, 11).setValue(subs[i][1][0]['pp']);
+    } 
+  }
+}
