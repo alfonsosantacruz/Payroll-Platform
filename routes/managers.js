@@ -280,6 +280,38 @@ router.post("/approveall", isLoggedIn, async function(req, res){
 });
 
 
+router.post("/toggleview", isLoggedIn, function(req, res){
+	var absoluteEmail = res.locals.email;
+	Manager.findOne({email: absoluteEmail}, function(err, manager){
+		if(err) {
+			console.log(err);
+		} else {
+			if (manager.viewPreference == 'Cards'){
+				manager.set({viewPreference: 'Rows'})
+				manager.save(function(err, updatedManager){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(updatedManager);
+						res.redirect("/home");
+					}
+				});
+			} else {
+				manager.set({viewPreference: 'Cards'})
+				manager.save(function(err, updatedManager){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(updatedManager);
+						res.redirect("/home");
+					}
+				});
+			}
+		}
+	}); 
+});
+
+
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
     	console.log(req.user.email);
