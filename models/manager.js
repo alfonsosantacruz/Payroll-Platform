@@ -10,7 +10,8 @@ var managerSchema = mongoose.Schema({
 		}
 	],
 	activeStatus: Boolean,
-	payPeriodsAvailable: []
+	payPeriodsAvailable: [],
+	viewPreference: String
 });
 
 module.exports = mongoose.model("Manager", managerSchema);
