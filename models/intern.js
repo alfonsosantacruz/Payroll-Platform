@@ -15,6 +15,7 @@ var internSchema = mongoose.Schema({
 	totalHours: Number,
 	average: Number,
 	activeStatus: Boolean,
+	viewPreference: String,
 	imagePath: String
 });
 
