@@ -14,7 +14,7 @@ exports = async function(payload){
   };
   await manager.updateOne(
     {email: payload.query.email},
-    {$set: {interns: internsArray, payPeriodsAvailable: [], activeStatus: (payload.query.activeStatus == 'true')}}
+    {$set: {interns: internsArray, payPeriodsAvailable: [], activeStatus: (payload.query.activeStatus == 'true'), viewPreference: 'Cards'}}
   );
   return internsArray
 }
