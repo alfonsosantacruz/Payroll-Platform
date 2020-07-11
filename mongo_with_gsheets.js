@@ -277,18 +277,18 @@ function reportRaw() {
       
       var rowNum = numUsedRows + i + 1;
       
-      sheet.getRange(rowNum, 1).setFormula('=CONCATENATE(C' + rowNum + ', " - ",K' + rowNum + ')');
-      sheet.getRange(rowNum, 2).setFormula('vlookup(C' + rowNum + ',Intern!$B:$J,9,False)');
-      sheet.getRange(rowNum, 4).setFormula('vlookup(C' + rowNum + ',Intern!$B:$J,2,False)');
-      sheet.getRange(rowNum, 3).setValue(subs[i][0]);
+      # Setting values from MongoDB to the spreadsheet
+      sheet.getRange(rowNum, 1).setFormula('=CONCATENATE(B' + rowNum + ', " - ",J' + rowNum + ')');
+      sheet.getRange(rowNum, 3).setFormula('vlookup(B' + rowNum + ',Intern!$B:$J,2,False)');
+      sheet.getRange(rowNum, 2).setValue(subs[i][0]);
       if (subs[i][1][0]['week1']['$numberInt'] == null) { var week1 = 0 } else { var week1 = subs[i][1][0]['week1']['$numberInt']}
-      sheet.getRange(rowNum, 7).setValue(week1);
+      sheet.getRange(rowNum, 6).setValue(week1);
       if (subs[i][1][0]['week2']['$numberInt'] == null) { var week2 = 0 } else { var week2 = subs[i][1][0]['week2']['$numberInt']}
-      sheet.getRange(rowNum, 8).setValue(week2);
+      sheet.getRange(rowNum, 7).setValue(week2);
       if (subs[i][1][0]['missed']['$numberInt'] == null) { var missed = 0 } else { var missed = subs[i][1][0]['missed']['$numberInt']}
-      sheet.getRange(rowNum, 9).setValue(missed);
-      sheet.getRange(rowNum, 10).setValue(subs[i][1][0]['description']);
-      sheet.getRange(rowNum, 11).setValue(subs[i][1][0]['pp']);
+      sheet.getRange(rowNum, 8).setValue(missed);
+      sheet.getRange(rowNum, 9).setValue(subs[i][1][0]['description']);
+      sheet.getRange(rowNum, 10).setValue(subs[i][1][0]['pp']);
     } 
   }
 }
