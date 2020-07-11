@@ -27,6 +27,6 @@ exports = async function(payload){
   
   await submission.updateMany(
     {_id: {$in: untouchedSubsArray}},
-    {$set: {approvalClosed: true, approved: true, dateApproved: submissionDate}}
+    {$set: {approvalClosed: true, approved: true, dateApproved: submissionDate, approvedBy: 'MiPay Default Approval'}}
   );
 }
