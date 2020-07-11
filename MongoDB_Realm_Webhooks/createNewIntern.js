@@ -9,7 +9,7 @@ exports = async function(payload){
   await intern.insertOne(payload.query);
   await intern.updateOne(
     {email: payload.query.email},
-    {$set: {submissions: [], totalHours: 0, average: 0, activeStatus: (payload.query.activeStatus == 'true')}}
+    {$set: {submissions: [], totalHours: 0, average: 0, viewPreference: "Cards", activeStatus: (payload.query.activeStatus == 'true')}}
   );
   const newIntern = await intern.findOne({email: payload.query.email});
   await manager.updateOne(
