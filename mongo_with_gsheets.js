@@ -277,7 +277,7 @@ function reportRaw() {
       
       var rowNum = numUsedRows + i + 1;
       
-      # Setting values from MongoDB to the spreadsheet
+      // Setting values from MongoDB to the spreadsheet
       sheet.getRange(rowNum, 1).setFormula('=CONCATENATE(B' + rowNum + ', " - ",J' + rowNum + ')');
       sheet.getRange(rowNum, 3).setFormula('vlookup(B' + rowNum + ',Intern!$B:$J,2,False)');
       sheet.getRange(rowNum, 2).setValue(subs[i][0]);
