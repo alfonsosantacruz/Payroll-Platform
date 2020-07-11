@@ -18,6 +18,7 @@ exports = async function(payload){
 		dateSubmitted: '',
 		approved: false,
 		dateApproved: '',
+		approvedBy: '',
 		ppClosed: false,
 		approvalClosed: false
   };
