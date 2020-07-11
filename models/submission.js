@@ -11,6 +11,7 @@ var submissionSchema = mongoose.Schema({
 	dateSubmitted: String,
 	approved: Boolean,
 	dateApproved: String,
+	approvedBy: String,
 	ppClosed: Boolean,
 	approvalClosed: Boolean
 });
