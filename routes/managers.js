@@ -155,6 +155,7 @@ router.post("/reportByManager", function(req, res){
 		 	reportedJustification = req.body.justification,
 		 	subId = req.body.subId,
 		 	submissionDate = (new Date()).toString(),
+		 	approver = req.body.approverName,
 		 	internId = req.body.internId;
  	Intern.findOne({_id: internId}, function(err, foundIntern){
  		if(err) {
@@ -173,7 +174,8 @@ router.post("/reportByManager", function(req, res){
 						submitted: true,
 						dateSubmitted: submissionDate,
 						approved: true,
-						dateApproved: submissionDate
+						dateApproved: submissionDate,
+						approvedBy: approver
 					});
 					foundSubmission.save(async function(err, data){
 						if(err){
@@ -199,6 +201,7 @@ router.post("/approve", function(req, res){
 		 	reportedJustification = req.body.justification,
 		 	subId = req.body.subId,
 		 	approvalDate = (new Date()).toString(),
+		 	approver = req.body.approverName,
 		 	internId = req.body.internId;
 	console.log('Triggered approve route');
 	Submission.findOne({_id: subId}, function(err, foundSubmission){
@@ -214,7 +217,8 @@ router.post("/approve", function(req, res){
 				submitted: true,
 				dateSubmitted: approvalDate,
 				approved: true,
-				dateApproved: approvalDate
+				dateApproved: approvalDate,
+				approvedBy: approver
 			});
 			foundSubmission.save(async function(err, data){
 				if(err){
@@ -259,7 +263,7 @@ router.post("/approveall", isLoggedIn, async function(req, res){
 							activeSubmissions.forEach(function(submission, index){
 	    						interns.forEach(function(intern, indexIntern){
 	    							if(intern.submissions.includes(submission._id)){
-	    								submission.set({approved: true, dateApproved: approvalDate});
+	    								submission.set({approved: true, dateApproved: approvalDate, approvedBy: manager.name});
 	    								submission.save(function(err, updatedSubmission){
 	    									if(err) {
 	    										console.log(err);
@@ -270,7 +274,7 @@ router.post("/approveall", isLoggedIn, async function(req, res){
 	    							}
 	    						});
 	    					});
-							res.redirect("/home")
+							res.redirect("/home");
 						}
 					});	
 				}
@@ -280,7 +284,7 @@ router.post("/approveall", isLoggedIn, async function(req, res){
 });
 
 
-router.post("/toggleview", isLoggedIn, function(req, res){
+router.post("/toggleViewHome", isLoggedIn, function(req, res){
 	var absoluteEmail = res.locals.email;
 	Manager.findOne({email: absoluteEmail}, function(err, manager){
 		if(err) {
@@ -304,6 +308,39 @@ router.post("/toggleview", isLoggedIn, function(req, res){
 					} else {
 						console.log(updatedManager);
 						res.redirect("/home");
+					}
+				});
+			}
+		}
+	}); 
+});
+
+
+router.post("/toggleViewProfile", isLoggedIn, function(req, res){
+	var absoluteEmail = res.locals.email,
+	    internId = req.body.internId;
+	Manager.findOne({email: absoluteEmail}, function(err, manager){
+		if(err) {
+			console.log(err);
+		} else {
+			if (manager.viewPreference == 'Cards'){
+				manager.set({viewPreference: 'Rows'})
+				manager.save(function(err, updatedManager){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(updatedManager);
+						res.redirect("/submissions/" + internId);
+					}
+				});
+			} else {
+				manager.set({viewPreference: 'Cards'})
+				manager.save(function(err, updatedManager){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(updatedManager);
+						res.redirect("/submissions/" + internId);
 					}
 				});
 			}
