@@ -32,6 +32,7 @@ router.get("/", isLoggedIn, function(req, res){
 	});
 });
 
+
 router.get("/schedule", isLoggedIn, async (req, res, next) => {
 	var absoluteEmail = res.locals.email;
 	Manager.findOne({email: absoluteEmail}, async function(err, foundManager){
@@ -63,6 +64,7 @@ router.get("/schedule", isLoggedIn, async (req, res, next) => {
 	});
 });
 
+
 router.get("/submissions", isLoggedIn, function(req, res){
 	var absoluteEmail = res.locals.email;
 	Intern.findOne({email: absoluteEmail}).populate("submissions").exec(async function(err, intern){
@@ -74,6 +76,7 @@ router.get("/submissions", isLoggedIn, function(req, res){
 		}
 	});
 });
+
 
 router.post("/edit", function(req, res){
 	const subId = req.body.subId;
@@ -95,6 +98,7 @@ router.post("/edit", function(req, res){
 		}
 	});	
 });
+
 
 router.post("/report", isLoggedIn, function(req, res){
 	const 	reportedWeek1 = parseFloat(req.body.week1),
@@ -130,6 +134,39 @@ router.post("/report", isLoggedIn, function(req, res){
 		}
 	});
 });
+
+
+router.post("/toggleViewSubmissions", isLoggedIn, function(req, res){
+	var absoluteEmail = res.locals.email;
+	Intern.findOne({email: absoluteEmail}, function(err, intern){
+		if(err) {
+			console.log(err);
+		} else {
+			if (intern.viewPreference == 'Cards'){
+				intern.set({viewPreference: 'Rows'})
+				intern.save(function(err, updatedIntern){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(updatedIntern);
+						res.redirect("/submissions");
+					}
+				});
+			} else {
+				intern.set({viewPreference: 'Cards'})
+				intern.save(function(err, updatedIntern){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(updatedIntern);
+						res.redirect("/submissions");
+					}
+				});
+			}
+		}
+	}); 
+});
+
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
