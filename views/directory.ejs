@@ -8,68 +8,26 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	<link rel="stylesheet" type='text/css' href="static/static.css">
     <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
-	<style>
-	table {
-	  font-family: arial, sans-serif;
-	  border-collapse: collapse;
-	  width: 100%;
-	}
-
-	td, th {
-	  border: 1px solid #dddddd;
-	  text-align: left;
-	  padding: 8px;
-	}
-
-	tr:nth-child(even) {
-	  background-color: #dddddd;
-	}
-	.footer {
-	  /* position: absolute; */
-	  height: 65px;
-	  text-align: center;
-	  bottom: 0;
-	  width: 100%;
-	  color: #999;
-	  font-family: 'acumin-pro';
-	  font-size: 16px;
-	}
-
-	.footer-links {
-	  margin: 10px 0;
-	}
-
-	.footer-links li {
-	  display: inline;
-	  margin-right: 10px;
-	}
-
-	.footer a {
-	  color: #999;
-	  font-size: 16px;
-	}
-
-	.footer div {
-	  display: inline-block;
-	}
-	</style>
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm navbar-dark bg-dark navbar-fixed-top">
+	<nav class="navbar navbar-expand-sm navbar-dark sticky-top bg-dark navbar-fixed-top">
 		<a class="navbar-brand" href="/">
 		    <img src="/img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
 		    Work Study Portal
-		 </a>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
 
 	  	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 	   	 	<ul class="navbar-nav mr-auto">
-	      		<li class="nav-item active">
+	      		<li class="nav-item">
 	        		<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 	      		</li>
-	      		<li class="nav-item active">
+	      		<li class="nav-item">
         			<a class="nav-link" href="/schedule">Calendar <span class="sr-only">(current)</span></a>
 	      		</li>
-	      		<li class="nav-item active">
+	      		<li class="nav-item">
 	        		<a class="nav-link" href="https://docs.google.com/document/d/1xr0DPjpI0h8l4860m3gfEvtXTbWprNV4NnGYCjbaAOc/edit?usp=sharing" target="_blank">FAQ <span class="sr-only">(current)</span></a>
 	      		</li>
 	      		<li class="nav-item active">
