@@ -10,28 +10,31 @@
     <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm navbar-dark bg-dark navbar-fixed-top">
+	<nav class="navbar navbar-expand-sm navbar-dark sticky-top bg-dark navbar-fixed-top">
 		<a class="navbar-brand" href="/">
 		    <img src="/img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
 		    Work Study Portal
-		 </a>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
 
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
 		    <li class="nav-item active">
 		    	<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 		    </li>
-		    <li class="nav-item active">
+		    <li class="nav-item">
 		        <a class="nav-link" href="/schedule">Calendar <span class="sr-only">(current)</span></a>
 		    </li>
-		    <li class="nav-item active">
+		    <li class="nav-item">
 		    	<a class="nav-link" href="https://docs.google.com/document/d/1xr0DPjpI0h8l4860m3gfEvtXTbWprNV4NnGYCjbaAOc/edit?usp=sharing" target="_blank">FAQ <span class="sr-only">(current)</span></a>
 		    </li>
-		    <li class="nav-item active">
+		    <li class="nav-item">
 		    	<a class="nav-link" href="/directory">Directory <span class="sr-only">(current)</span></a>
 		    </li>
 		    <li class="nav-item dropdown">
-	          	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Pay Period</a>
+	          	<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Pay Period</a>
 	        	<div class="dropdown-menu">
 	        		<%manager.payPeriodsAvailable.forEach(function(pp, index){%>
 	        			<a class="dropdown-item" href="/home/<%=pp%>"><%=pp%></a>
@@ -44,7 +47,7 @@
 	    		</form>
 		    <%}%>
 	    </ul>
-	    <form class="form-inline my-2 my-lg-0" action="/toggleview" method="POST">
+	    <form class="form-inline my-2 my-lg-0" action="/toggleViewHome" method="POST">
     		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Toggle View</button>
 		</form>
 	    <form class="form-inline my-2 my-lg-0" action="/logout" method="GET">
@@ -70,10 +73,12 @@
 					<th>Week 1</th>
 					<th>Week 2</th>
 					<th>Missed</th>
-					<th>Total Pay Period</th>
+					<th>Total</th>
 					<th>Justification/Tasks Developed</th>
 					<th>Total Hours YTD</th>
 					<th>Average</th>
+					<th>Date Approved</th>
+					<th>Approved By</th>
 					<th>Action</th>
 				</tr>
 
@@ -91,17 +96,21 @@
 										<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
 										<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
 										<td><input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
-										<td><a name="total" id="total"><%=submission.total%> hours</a></td>
+										<td><a name="total" id="total"><%=submission.total%> hrs</a></td>
 										<td><textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
 
 
 										<td><%=intern.totalHours%></td>
 										<td><%=intern.average%></td>
 
+										<td></td>
+										<td></td>
+
 										<td>
 											<div class="p-3 d-flex align-items-end mt-auto col-lg-3">
 						                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
 						                    	<input type="text" name="internId" hidden value="<%=intern.id%>">
+						                    	<input type="text" name="approverName" hidden value="<%=manager.name%>">
 						                      	<button type="submit" id="submit" form="approval" class="align-self-end btn btn-success">Approve</button>
 						                	</div>
 						                </td>
@@ -114,15 +123,18 @@
 									<td><%=intern.email%></td>
 									<td><%=intern.role%></td>
 
-									<td><%=submission.week1%> hours</td>
-									<td><%=submission.week2%> hours</td>
-									<td><%=submission.missed%> hours</td>
-									<td><%=submission.week1 + submission.week2 +submission.missed%> hours</td>
+									<td><%=submission.week1%> hrs</td>
+									<td><%=submission.week2%> hrs</td>
+									<td><%=submission.missed%> hrs</td>
+									<td><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
 									<td><p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"><%=submission.description%><p></td>
 
 
-									<td><%=intern.totalHours%> hours</td>
-									<td><%=intern.average%> hours</td>
+									<td><%=intern.totalHours%> hrs</td>
+									<td><%=intern.average%> hrs</td>
+
+									<td><%=submission.dateApproved%></td>
+									<td><%=submission.approvedBy%></td>
 
 									<td>
 										<%if(submission.approvalClosed == false){%>
@@ -160,42 +172,50 @@
 			    					<form action="/submissions/<%=intern.id%>" method="GET" id="<%=intern.id%>"></form>
 			    					<form action="/approve" method="POST" id="approval">
 						                <div id="card" class="row border border dark">
-						                    <div class="p-1 col-lg-4">
+						                    <div class="p-1 col-lg-4 justify-content-center border border dark">
 					                    		<input type="image" name="profile" src="<%=intern.imagePath%>" form="<%=intern.id%>" id="profile_picture" class="d-inline-block align-top" alt="" loading="lazy">
+					                    		<!-- <div class="d-flex justify-content-center col-lg-12 border border dark" id = "Stats title"><a><%=intern.role%><a></div> -->
 						                    </div>
-					                    
-
 						                    <div class="col-lg-8">
 						                      	<div  id="card" class="row">
 						                          	<div class="col-lg-12">
-						                          		<a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
+						                          		<a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%> - <%=intern.role%></a>
 						                          	</div>
-						                        	<div class="col-lg-6">
-						                        		<label class="my-1 mr-2" for="week1">Week 1</label>
+						                        	<div class="col-lg-4">
+						                        		<label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
 												      	<input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
 												    </div>
-						                          	<div class="col-lg-6">
-						                          		<label class="my-1 mr-2" for="week2">Week 2</label>
+						                          	<div class="col-lg-4">
+						                          		<label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
 												      	<input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
 						                          	</div>
-						                          	<div class="col-lg-6">
-						                          		<label class="my-1 mr-2" for="missed">Forgot to submit</label>
+						                          	<div class="col-lg-4">
+						                          		<label class="my-1 mr-2" for="missed"><strong>Missed</strong></label>
 													    <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
 						                          	</div>
-						                          	<div class="col-lg-6">
-						                          		<label class="my-1 mr-2" name="total" for="Total">Total</label>
-													    <a name="total" id="total"><%=submission.total%> hours</a>
+						                          	<div class="col-lg-4">
+						                          		<label class="my-1 mr-2" name="total" for="Total"><strong>Total</strong></label>
+													    <a name="total" id="total"><%=submission.total%> hrs</a>
+						                          	</div>
+						                          	<div class="col-lg-4">
+						                          		<label class="my-1 mr-2" name="totalytd" for="TotalYTD"><strong>TotalYTD</strong></label>
+													    <a name="totalytd" id="totalytd"><%=intern.totalHours%> hrs</a>
+						                          	</div>
+						                          	<div class="col-lg-4">
+						                          		<label class="my-1 mr-2" name="average" for="Average"><strong>AverageYTD</strong></label>
+													    <a name="average" id="average"><%=intern.average%> hrs/wk</a>
 						                          	</div>
 						                      	</div>
 						                  	</div>
 						                    
 						                    <div class="p-3 col-lg-9">
-						                      	<label class="p-1 align-self-start" for="justification">Justification/Tasks Developed</label>
+						                      	<label class="p-1 align-self-start" for="justification"><strong>Justification/Tasks Developed</strong></label>
 												<textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
 						                    </div>
 						                    <div class="p-3 d-flex align-items-end mt-auto col-lg-3">
 						                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
 						                    	<input type="text" name="internId" hidden value="<%=intern.id%>">
+						                    	<input type="text" name="approverName" hidden value="<%=manager.name%>">
 						                      	<button type="submit" id="submit" form="approval" class="align-self-end btn btn-success">Approve</button>
 						                    </div>
 					                	</div>
@@ -215,29 +235,37 @@
 					                      	</div>
 					                    </div>
 					                    <form action="/submissions/<%=intern.id%>" method="GET" id="<%=intern.id%>"></form>
-					                    <div class="p-1 col-lg-4">
+					                    <div class="d-flex flex-column p-1 col-lg-4">
 				                    		<input type="image" name="profile" src="<%=intern.imagePath%>" form="<%=intern.id%>" id="profile_picture" class="d-inline-block align-top" alt="" loading="lazy">
 					                    </div>
 					                    <div class="col-lg-8">
 					                      	<div id="card" class="row">
 					                          	<div class="col-lg-12">
-					                          		<a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
+					                          		<a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%> - <%=intern.role%></a>
 				                          		</div>
-					                        	<div class="col-lg-6">
+					                        	<div class="p-1 col-lg-6">
 					                        		<label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
-											      	<a id="week1" class="mr-sm-1"><%=submission.week1%> hours<a>
+											      	<a id="week1" class="mr-sm-1"><%=submission.week1%> hrs<a>
 					                        	</div>
-					                          	<div class="col-lg-6">
+					                          	<div class="p-1 col-lg-6">
 					                          		<label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
-											      	<a id="week2" class="mr-sm-1"><%=submission.week2%> hours<a>
+											      	<a id="week2" class="mr-sm-1"><%=submission.week2%> hrs<a>
 					                          	</div>
-					                          	<div class="col-lg-6">
-					                          		<label class="my-1 mr-2" for="missed"><strong>Forgot to submit</strong></label>
-											      	<a id="missed" class="mr-sm-1"><%=submission.missed%> hours<a>
+					                          	<div class="p-1 col-lg-6">
+					                          		<label class="my-1 mr-2" for="missed"><strong>Missed</strong></label>
+											      	<a id="missed" class="mr-sm-1"><%=submission.missed%> hrs<a>
 					                          	</div>
-					                          	<div class="col-lg-6">
+					                          	<div class="p-1 col-lg-6">
 					                          		<label class="my-1 mr-2" name="total" for="Total"><strong>Total</strong></label>
-											      	<a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hours</a>
+											      	<a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hrs</a>
+					                          	</div>
+					                          	<div class="p-1 col-lg-6">
+					                          		<label class="my-1 mr-2" name="totalytd" for="TotalYTD"><strong>TotalYTD</strong></label>
+											      	<a id="totalSubmitted"><%=intern.totalHours%> hrs</a>
+					                          	</div>
+					                          	<div class="p-1 col-lg-6">
+					                          		<label class="my-1 mr-2" name="average" for="Average"><strong>AverageYTD</strong></label>
+											      	<a id="totalSubmitted"><%=intern.average%> hrs/wk</a>
 					                          	</div>
 					                      	</div>
 					                  	</div>
@@ -246,7 +274,8 @@
 					                      	<label class="p-1 align-self-start" for="justification"><strong>Justification/Tasks Developed</strong></label>
 											<p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"> <%=submission.description%><p>
 											<div id="buttondiv" class="p-1 flex-fill justify-content-end">
-												<a class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></a>
+												<p class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></p>
+												<p class="align-self-end" id="dateSubmitted"><strong>Approved by:</strong> <%=submission.approvedBy%></p>
 							    			</div>
 					                    </div>
 					                </div>
@@ -258,6 +287,15 @@
 		    </div>
 		</div>
 	<%}%>
+
+	<footer class="footer">
+	    <div>
+	       Copyright © Minerva Project, Inc. All Rights Reserved.&nbsp;&nbsp;&nbsp;
+	    </div>
+	    <div>
+	       <a id="mp-footer-terms" href="https://minerva.kgi.edu/terms/">Terms and Conditions</a> • <a id="mp-footer-privacy" href="https://minerva.kgi.edu/privacy/">Privacy Policy</a>
+	    </div>
+  	</footer>
 
 	<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
