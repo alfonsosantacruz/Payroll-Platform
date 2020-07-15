@@ -10,39 +10,46 @@
     <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm navbar-dark bg-dark navbar-fixed-top">
+	<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark">
 		<a class="navbar-brand" href="/">
 		    <img src="/img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
 		    Work Study Portal
-		 </a>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
 
-	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	    <ul class="navbar-nav mr-auto">
-		    <li class="nav-item active">
-		    	<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-		    </li>
-		    <li class="nav-item active">
-		        <a class="nav-link" href="/schedule">Calendar <span class="sr-only">(current)</span></a>
-		    </li>
-		    <li class="nav-item active">
-		    	<a class="nav-link" href="https://docs.google.com/document/d/1xr0DPjpI0h8l4860m3gfEvtXTbWprNV4NnGYCjbaAOc/edit?usp=sharing" target="_blank">FAQ <span class="sr-only">(current)</span></a>
-		    </li>
-		    <li class="nav-item active">
-		    	<a class="nav-link" href="/directory">Directory <span class="sr-only">(current)</span></a>
-		    </li>
-		    <li class="nav-item dropdown">
-	          	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Pay Period</a>
-	        	<div class="dropdown-menu">
-	        		<%manager.payPeriodsAvailable.forEach(function(pp, index){%>
-	        			<a class="dropdown-item" href="/home/<%=pp%>"><%=pp%></a>
-	        		<%});%>
-	          	</div>
-	        </li>
-	    </ul>
-	    <form class="form-inline my-2 my-lg-0" action="/logout" method="GET">
-	      	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign out</button>
-	    </form>
-	  </div>
+	  	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    	<ul class="navbar-nav mr-auto">
+		    	<li class="nav-item">
+		    		<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+		    	</li>
+		    	<li class="nav-item">
+		        	<a class="nav-link" href="/schedule">Calendar <span class="sr-only">(current)</span></a>
+		    	</li>
+		    	<li class="nav-item">
+		    		<a class="nav-link" href="https://docs.google.com/document/d/1xr0DPjpI0h8l4860m3gfEvtXTbWprNV4NnGYCjbaAOc/edit?usp=sharing" target="_blank">FAQ <span class="sr-only">(current)</span></a>
+		    	</li>
+		    	<li class="nav-item">
+		    		<a class="nav-link" href="/directory">Directory <span class="sr-only">(current)</span></a>
+		    	</li>
+		    	<li class="nav-item dropdown">
+	          		<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Pay Period</a>
+	        		<div class="dropdown-menu">
+	        			<%manager.payPeriodsAvailable.forEach(function(pp, index){%>
+	        				<a class="dropdown-item" href="/home/<%=pp%>"><%=pp%></a>
+	        			<%});%>
+	          		</div>
+	        	</li>
+	    	</ul>
+	    	<form class="form-inline my-2 my-lg-0" action="/toggleViewProfile" method="POST">
+	    		<input type="text" name="internId" hidden value="<%=user.id%>">
+    			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Toggle View</button>
+			</form>
+	    	<form class="form-inline my-2 my-lg-0" action="/logout" method="GET">
+	      		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign out</button>
+	    	</form>
+	  	</div>
 	</nav>
 
 	<div class="d-flex p-4 row">
@@ -54,101 +61,180 @@
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Role:</strong> <%=user.role%><a></div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager:</strong> <%=user.manager%></a></div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager Email:</strong> <%=user.managerEmail%></a></div>
-			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Total Hours:</strong> <%=user.totalHours%></a></div>
-			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Average:</strong> <%=user.average%></a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Total Hours:</strong> <%=user.totalHours%> hrs</a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Average:</strong> <%=user.average%> hrs/wk</a></div>
 		</div>
 
-		<!-- Cards Container-->
+			<!--Container-->
 		<div class="row col-md-10">
-			<!-- Starts new card-->
-			<%submission.forEach(function(submission){%>
+
+			<%if (manager.viewPreference == "Rows") {%>
+				<div class="p-4 col-md-12">
+					<table>
+						<tr>
+							<th>Pay Period</th>
+							<th>Week 1</th>
+							<th>Week 2</th>
+							<th>Missed</th>
+							<th>Total</th>
+							<th>Justification/Tasks Developed</th>
+							<th>Date Approved</th>
+							<th>Approved By</th>
+							<th>Action</th>
+						</tr>
+						<%submission.forEach(function(submission){%>
+							<%if(submission.approved == false){%>
+	    						<tr>
+									<form action="/submissions/<%=user.id%>" method="GET" id="<%=user.id%>"></form>
+		    						<form action="/reportByManager" method="POST" id="approval">
+										<td><a href="/home/<%=submission.pp%>" onclick="document.getElementById('<%=submission.pp%>').submit()"><%=submission.pp%></a></td>
+										<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
+										<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
+										<td><input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
+										<td><a name="total" id="total"><%=submission.total%> hrs</a></td>
+										<td><textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
+
+										<td></td>
+										<td></td>
+
+										<td>
+											<div class="p-3 d-flex align-items-end mt-auto col-lg-3">
+						                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
+						                    	<input type="text" name="internId" hidden value="<%=user.id%>">
+						                    	<input type="text" name="approverName" hidden value="<%=manager.name%>">
+						                      	<button type="submit" id="submit" form="approval" class="align-self-end btn btn-success">Approve</button>
+						                	</div>
+						                </td>
+					                </form>
+								</tr>
+							<%} else {%>
+								<tr>
+									<form action="/submissions/<%=user.id%>" method="GET" id="<%=user.id%>"></form>
+									<td><a href="/home/<%=submission.pp%>" onclick="document.getElementById('<%=submission.pp%>').submit()"><%=submission.pp%></a></td>
+									<td><%=submission.week1%> hrs</td>
+									<td><%=submission.week2%> hrs</td>
+									<td><%=submission.missed%> hrs</td>
+									<td><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
+									<td><p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"><%=submission.description%><p></td>
+
+									<td><%=submission.dateApproved%></td>
+									<td><%=submission.approvedBy%></td>
+
+									<td>
+										<%if(submission.approvalClosed == false){%>
+											<form action="/editByManager" method="POST">
+												<div class="d-flex justify-content-center"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
+											</form>
+										<%} else {%>
+											<div class="d-flex justify-content-center"><a>N/A</a></div>
+										<%}%>
+					                </td>
+								</tr>
+							<%}%>
+						<%});%>
+					</table>
+				</div>
+
+			<%} else {%>
 				<!-- Starts new card-->
-				<div class="p-1 col-md-6">
-					<div id="ppdiv" class="col-md-12 border border dark">
-						<div id = "pptitle" class="p-2 col-md-12">
-							<%if(submission.approvalClosed == false && submission.approved == true){%>
-								<form action="/editByManager" method="POST">
-									<div class="d-flex flex-row-reverse"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
-								</form>
-							<%};%>
-							<a name="pp" class="p-1"><strong><%=submission.pp%></strong></a>
-						</div>
-						<div class="col-md-12 justify-content-start">
-							<div  class="p-2 col-md-12 d-inline-block align-top flex-column">
-								<%if(submission.approved == true){%>
-									<div class="form-inline align-items-stretch">
-										<div class="col-md-4 form-column">
-											<div class="form-group mb-1">
-										      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
-										      <a id="week1" class="mr-sm-1"><%=submission.week1%> hours<a>
-										    </div>
-										    <div class="form-group mb-1">
-										      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
-										      <a id="week2" class="mr-sm-1"><%=submission.week2%> hours<a>
-										    </div>
-										    <div class="form-group mb-1">
-										      <label class="my-1 mr-2" for="missed"><strong>Forgot to submit</strong></label>
-										      <a id="missed" class="mr-sm-1"><%=submission.missed%> hours<a>
-										    </div>
-										    <div class="p-3 form-group mb-1">
-										      <label class="my-1 mr-2" name="total" for="Total"><strong>Total</strong></label>
-										      <a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hours</a>
-										    </div>
-										</div>
-										<div class="col-md-8 form-column">
-											<div class="flex-column">
-										      	<label class="p-1 align-self-start" for="justification"><strong>Justification/Tasks Developed</strong></label>
-												<p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"> <%=submission.description%><p>
-												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
-													<%if(submission.approved == false){%>
-														<a class="align-self-end" id="dateSubmitted"><strong>Date Submitted:</strong> <%=submission.dateSubmitted%></a>
-													<%} else {%>
-														<a class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></a>
-													<%};%>
-								    			</div>
-										    </div>
-										</div>
-									</div>
-								<%} else {%>
-									<form class="form-inline align-items-stretch" action="/reportByManager" method="POST">
-										<div class="col-md-4 form-column">
-											<div class="form-group mb-1">
-										      <label class="my-1 mr-2" for="week1">Week 1</label>
-										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
-										    </div>
-										    <div class="form-group mb-1">
-										      <label class="my-1 mr-2" for="week2">Week 2</label>
-										      <input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
-										    </div>
-										    <div class="form-group mb-1">
-										      <label class="my-1 mr-2" for="missed">Forgot to submit</label>
-										      <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
-										    </div>
-										    <div class="p-3 form-group mb-1">
-										      <label class="my-1 mr-2" name="total" for="Total">Total</label>
-										      <a name="total" id="total"></a>
-										    </div>
-										</div>
-										<div class="col-md-8 form-column">
-											<div class="flex-column">
-										      	<label class="p-1 align-self-start" for="justification">Justification/Tasks Developed</label>
-												<textarea class="p-2 flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
-												<input type="text" name="subId" hidden value="<%=submission.id%>">
-												<input type="text" name="internId" hidden value="<%=user.id%>">
-												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
-										    		<button type="submit" id="submit" class="align-self-end btn btn-success">Approve</button>
-								    			</div>
-										    </div>
-										</div>
+				<%submission.forEach(function(submission){%>
+					<!-- Starts new card-->
+					<div class="p-1 col-md-6">
+						<div id="ppdiv" class="col-md-12 border border dark">
+							<div id = "pptitle" class="p-2 col-md-12">
+								<%if(submission.approvalClosed == false && submission.approved == true){%>
+									<form action="/editByManager" method="POST">
+										<div class="d-flex flex-row-reverse"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
 									</form>
 								<%};%>
+								<a name="pp" class="p-1"><strong><%=submission.pp%></strong></a>
+							</div>
+							<div class="col-md-12 justify-content-start">
+								<div  class="p-2 col-md-12 d-inline-block align-top flex-column">
+									<%if(submission.approved == true){%>
+										<div class="form-inline align-items-stretch">
+											<div class="d-flex col-md-4 flex-column">
+												<div class="form-group mb-1">
+											      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
+											      <a id="week1" class="mr-sm-1"><%=submission.week1%> hrs<a>
+											    </div>
+											    <div class="form-group mb-1">
+											      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
+											      <a id="week2" class="mr-sm-1"><%=submission.week2%> hrs<a>
+											    </div>
+											    <div class="form-group mb-1">
+											      <label class="my-1 mr-2" for="missed"><strong>Missed</strong></label>
+											      <a id="missed" class="mr-sm-1"><%=submission.missed%> hrs<a>
+											    </div>
+											    <div class="form-group mb-1">
+											      <label class="my-1 mr-2" name="total" for="Total"><strong>Total</strong></label>
+											      <a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hrs</a>
+											    </div>
+											    <div class="p-3 form-group mb-1">
+													<p class="align-self-end" id="dateSubmitted"><strong>Approved by:</strong> <%=submission.approvedBy%></p>
+											    </div>
+											</div>
+											<div class="d-flex col-md-8 flex-column">
+												<div class="flex-column">
+											      	<label class="p-1 align-self-start" for="justification"><strong>Justification/Tasks Developed</strong></label>
+													<p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"> <%=submission.description%><p>
+												</div>
+												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
+													<p class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></p>
+								    			</div>
+											</div>
+										</div>
+									<%} else {%>
+										<form class="form-inline align-items-stretch" action="/reportByManager" method="POST">
+											<div class="col-md-4 form-column">
+												<div class="form-group mb-1">
+											      <label class="my-1 mr-2" for="week1">Week 1</label>
+											      <input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
+											    </div>
+											    <div class="form-group mb-1">
+											      <label class="my-1 mr-2" for="week2">Week 2</label>
+											      <input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
+											    </div>
+											    <div class="form-group mb-1">
+											      <label class="my-1 mr-2" for="missed">Missed</label>
+											      <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
+											    </div>
+											    <div class="p-3 form-group mb-1">
+											      <label class="my-1 mr-2" name="total" for="Total">Total</label>
+											      <a name="total" id="total"><%=submission.total%> hrs</a>
+											    </div>
+											</div>
+											<div class="col-md-8 form-column">
+												<div class="flex-column">
+											      	<label class="p-1 align-self-start" for="justification">Justification/Tasks Developed</label>
+													<textarea class="p-2 flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
+													<input type="text" name="subId" hidden value="<%=submission.id%>">
+													<input type="text" name="internId" hidden value="<%=user.id%>">
+													<div id="buttondiv" class="p-1 flex-fill justify-content-end">
+											    		<button type="submit" id="submit" class="align-self-end btn btn-success">Approve</button>
+									    			</div>
+											    </div>
+											</div>
+										</form>
+									<%};%>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			<%});%>
+				<%});%>
+			<%}%>
 		</div>
 	</div>
+
+
+	<footer class="footer">
+	    <div>
+	       Copyright © Minerva Project, Inc. All Rights Reserved.&nbsp;&nbsp;&nbsp;
+	    </div>
+	    <div>
+	       <a id="mp-footer-terms" href="https://minerva.kgi.edu/terms/">Terms and Conditions</a> • <a id="mp-footer-privacy" href="https://minerva.kgi.edu/privacy/">Privacy Policy</a>
+	    </div>
+  	</footer>
 	
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script type="text/javascript" src="../js/dashboard.js"></script>
