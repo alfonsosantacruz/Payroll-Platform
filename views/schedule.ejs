@@ -10,10 +10,10 @@
     <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm navbar-dark sticky-top bg-dark navbar-fixed-top">
+	<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark">
 		<a class="navbar-brand" href="/">
-		    <img src="/img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
-		    Work Study Portal
+		    <img src="/img/mskgi_logo.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
+		    Work Study Platform
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     		<span class="navbar-toggler-icon"></span>
@@ -50,25 +50,40 @@
 	      <h1>Work Study Schedule Summer 2020</h1>
 	    </div>
 	   	<div class="p-4 col-lg-12">
-			<table>
-				<tr>
-					<th>Pay Period Number</th>
-					<th>Work Study Week Number</th>
-					<th>Week Start Date</th>
-					<th>Week End Date</th>
-					<th>Last Date Pay Period</th>
-					<th>Pay Period Pay Date</th>
-				</tr>
-				<%for(var i = 0; i < rows.length; i++){%>
+			<table class="table">
+				<thead class="thead-light">
 					<tr>
-						<td><%=rows[i].Payroll_Number%></td>
-						<td><%=rows[i].WS_Week%></td>
-						<td><%=rows[i].Start_Date%></td>
-						<td><%=rows[i].End_Date%></td>
-						<td><%=rows[i].PP_Last_Date%></td>
-						<td><%=rows[i].Pay_Date%></td>
+						<th>Pay Period Number</th>
+						<th>Work Study Week Number</th>
+						<th>Week Start Date</th>
+						<th>Week End Date</th>
+						<th>Last Date Pay Period</th>
+						<th>Pay Period Pay Date</th>
 					</tr>
-				<%}%>
+				</thead>
+				<tbody>
+					<%for(var i = 0; i < rows.length; i++){%>
+						<%if(rows[i].WS_Week == weekNum){%>
+							<tr class="table-success">
+								<td><%=rows[i].Payroll_Number%></td>
+								<td><%=rows[i].WS_Week%></td>
+								<td><%=rows[i].Start_Date%></td>
+								<td><%=rows[i].End_Date%></td>
+								<td><%=rows[i].PP_Last_Date%></td>
+								<td><%=rows[i].Pay_Date%></td>
+							</tr>
+						<%} else {%>
+							<tr>
+								<td><%=rows[i].Payroll_Number%></td>
+								<td><%=rows[i].WS_Week%></td>
+								<td><%=rows[i].Start_Date%></td>
+								<td><%=rows[i].End_Date%></td>
+								<td><%=rows[i].PP_Last_Date%></td>
+								<td><%=rows[i].Pay_Date%></td>
+							</tr>
+						<%}%>
+					<%}%>
+				</tbody>
 			</table>
 		</div>
 	</div>
@@ -84,5 +99,4 @@
   	</footer>
 
 </body>
-</html>
 </html>
