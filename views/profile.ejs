@@ -2,18 +2,15 @@
 <head>
 	<title>WS_Portal</title>
 	<base href="/">
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	<link rel="stylesheet" type='text/css' href="static/static.css">
     <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark">
 		<a class="navbar-brand" href="/">
-		    <img src="/img/minerva_project.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
-		    Work Study Portal
+		    <img src="/img/mskgi_logo.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
+		    Work Study Platform
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     		<span class="navbar-toggler-icon"></span>
@@ -53,85 +50,111 @@
 	</nav>
 
 	<div class="d-flex p-4 row">
-		<div class="p-2 col-md-2 border border dark">
-			<div class="d-flex justify-content-center p-2 bd-highlight"><img src="<%=user.imagePath%>" id = "profile_picture" class="d-inline-block align-top" alt="" loading="lazy"></div>
+		<div class="p-2 col-lg-2 border border-dark rounded" id="profile_section">
+			<div class="d-flex justify-content-center p-2 bd-highlight"><img src="<%=user.imagePath%>" id ="profile_picture" class="d-inline-block align-top border border-dark" alt="" loading="lazy"></div>
 			<div class="d-flex justify-content-center p-3 bd-highlight" id = "full_name"><a><strong><%=user.name%></strong></a></div>
+			<% if(user.average > 7.5){ %>
+				<div class="d-flex justify-content-center p-3 bd-highlight">
+					<%if((15*(user.submissions.length + 1) - user.totalHours) > 0){%>
+						<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(user.submissions.length + 1) - user.totalHours%> to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+					<%} else {%>
+						<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+					<%}%> 
+				</div>
+			<%}%>
 			<hr id = "profile_split">
 			<div class="d-flex justify-content-center p-2 bd-highlight" id = "Stats title"><a><strong>Info & Stats</strong></a></div>
+			<div class="d-flex justify-content-center p-3 bd-highlight" id = "full_name">
+				<%if(user.activeStatus == true){%>
+					<a class="badge badge-primary">Active</a>
+				<%} else {%>
+					<a class="badge badge-secondary">Inactive</a>
+				<%}%>
+			</div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Role:</strong> <%=user.role%><a></div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager:</strong> <%=user.manager%></a></div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager Email:</strong> <%=user.managerEmail%></a></div>
-			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Total Hours:</strong> <%=user.totalHours%> hrs</a></div>
-			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Average:</strong> <%=user.average%> hrs/wk</a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total Hours mean?" data-content="This variable indicates the total amount of hours reported since the beginning of the Academic Year"><strong>Total Hours:</strong> <%=user.totalHours%> hrs</a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Average mean?" data-content="This variable indicates the average worked hours per week, as reported by the intern. It considers the total hours reported and the start date of the internship. This value should not be higher than 7.5 hrs/wk"><strong>Average:</strong> <%=user.average%> hrs/wk</a></div>
 		</div>
 
 			<!--Container-->
-		<div class="row col-md-10">
+		<div class="row col-lg-10">
 
 			<%if (manager.viewPreference == "Rows") {%>
 				<div class="p-4 col-md-12">
-					<table>
-						<tr>
-							<th>Pay Period</th>
-							<th>Week 1</th>
-							<th>Week 2</th>
-							<th>Missed</th>
-							<th>Total</th>
-							<th>Justification/Tasks Developed</th>
-							<th>Date Approved</th>
-							<th>Approved By</th>
-							<th>Action</th>
-						</tr>
-						<%submission.forEach(function(submission){%>
-							<%if(submission.approved == false){%>
-	    						<tr>
-									<form action="/submissions/<%=user.id%>" method="GET" id="<%=user.id%>"></form>
-		    						<form action="/reportByManager" method="POST" id="approval">
-										<td><a href="/home/<%=submission.pp%>" onclick="document.getElementById('<%=submission.pp%>').submit()"><%=submission.pp%></a></td>
-										<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
-										<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
-										<td><input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
-										<td><a name="total" id="total"><%=submission.total%> hrs</a></td>
-										<td><textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
+					<table class="table">
+						<thead class="thead-light">
+							<tr>
+								<th>Pay Period</th>
+								<th>Week 1</th>
+								<th>Week 2</th>
+								<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any.">Unreported</th>
+								<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2.">Total</th>
+								<th>Tasks Completed</th>
+								<th>Date Approved</th>
+								<th>Approved By</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%submission.forEach(function(submission){%>
+								<%if(submission.total > 15){%>
+	    							<tr class="table-warning">
+										<td><a href="/home/<%=submission.pp%>" onclick="document.getElementById('<%=submission.pp%>').submit()"><%=submission.pp%></a>
+											<div class="d-flex justify-content-end">
+												<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
+											</div>
+	    						<%} else {%>
+	    							<tr>
+										<td><a href="/home/<%=submission.pp%>" onclick="document.getElementById('<%=submission.pp%>').submit()"><%=submission.pp%></a>
+								<%}%>
+										</td>
+										<%if(submission.approved == false){%>
+											<form action="/reportByManager" method="POST" id="approval">
+												<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
+												<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
+												<td><input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
+												<td><a name="total" id="total"><%=submission.total%> hrs</a></td>
+												<td><textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
 
-										<td></td>
-										<td></td>
+												<td></td>
+												<td></td>
 
-										<td>
-											<div class="p-3 d-flex align-items-end mt-auto col-lg-3">
-						                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
-						                    	<input type="text" name="internId" hidden value="<%=user.id%>">
-						                    	<input type="text" name="approverName" hidden value="<%=manager.name%>">
-						                      	<button type="submit" id="submit" form="approval" class="align-self-end btn btn-success">Approve</button>
-						                	</div>
-						                </td>
-					                </form>
-								</tr>
-							<%} else {%>
-								<tr>
-									<form action="/submissions/<%=user.id%>" method="GET" id="<%=user.id%>"></form>
-									<td><a href="/home/<%=submission.pp%>" onclick="document.getElementById('<%=submission.pp%>').submit()"><%=submission.pp%></a></td>
-									<td><%=submission.week1%> hrs</td>
-									<td><%=submission.week2%> hrs</td>
-									<td><%=submission.missed%> hrs</td>
-									<td><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
-									<td><p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"><%=submission.description%><p></td>
-
-									<td><%=submission.dateApproved%></td>
-									<td><%=submission.approvedBy%></td>
-
-									<td>
-										<%if(submission.approvalClosed == false){%>
-											<form action="/editByManager" method="POST">
-												<div class="d-flex justify-content-center"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
-											</form>
+												<td>
+													<div class="p-3 d-flex align-items-end mt-auto col-lg-3">
+								                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
+								                    	<input type="text" name="internId" hidden value="<%=user.id%>">
+								                    	<input type="text" name="approverName" hidden value="<%=manager.name%>">
+								                      	<button type="submit" id="submit" form="approval" class="align-self-end btn btn-success">Approve</button>
+								                	</div>
+								                </td>
+							                </form>
+										
 										<%} else {%>
-											<div class="d-flex justify-content-center"><a>N/A</a></div>
+											<!-- Format when the card was approved already -->
+											<td><%=submission.week1%> hrs</td>
+											<td><%=submission.week2%> hrs</td>
+											<td><%=submission.missed%> hrs</td>
+											<td><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
+											<td><p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"><%=submission.description%><p></td>
+
+											<td><%=submission.dateApproved%></td>
+											<td><%=submission.approvedBy%></td>
+
+											<td>
+												<%if(submission.approvalClosed == false){%>
+													<form action="/editByManager" method="POST">
+														<div class="d-flex justify-content-center"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
+													</form>
+												<%} else {%>
+													<div class="d-flex justify-content-center"><a>N/A</a></div>
+												<%}%>
+							                </td>
 										<%}%>
-					                </td>
-								</tr>
-							<%}%>
-						<%});%>
+									</tr>
+							<%});%>
+						</tbody>
 					</table>
 				</div>
 
@@ -139,15 +162,24 @@
 				<!-- Starts new card-->
 				<%submission.forEach(function(submission){%>
 					<!-- Starts new card-->
-					<div class="p-1 col-md-6">
-						<div id="ppdiv" class="col-md-12 border border dark">
-							<div id = "pptitle" class="p-2 col-md-12">
-								<%if(submission.approvalClosed == false && submission.approved == true){%>
-									<form action="/editByManager" method="POST">
-										<div class="d-flex flex-row-reverse"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
-									</form>
-								<%};%>
-								<a name="pp" class="p-1"><strong><%=submission.pp%></strong></a>
+					<div class="p-1 col-lg-6">
+						<%if(submission.total > 15){%>
+							<div id="ppdiv" class="col-md-12 rounded border border-warning">
+								<div id = "pptitle" class="col-md-12">
+									<div class="p-1 row justify-content-end">
+		    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
+		    			<%} else {%>
+		    				<div id="ppdiv" class="col-md-12 rounded border border-dark">
+								<div id = "pptitle" class="col-md-12">
+									<div class="p-1 row justify-content-end">
+		    			<%}%>	
+												    		
+									<%if(submission.approvalClosed == false && submission.approved == true){%>
+										<form action="/editByManager" method="POST" id="<%=submission.id%>"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"></form>
+										<button type="submit" class="fas fa-edit" form="<%=submission.id%>"></button>
+									<%};%>
+								</div>
+								<div id="pp_frame" class="d-flex rounded border border-dark col-md-12 justify-content-center"><a href="/home/<%=submission.pp%>" onclick="document.getElementById('<%=submission.pp%>').submit()"><%=submission.pp%></a></div>
 							</div>
 							<div class="col-md-12 justify-content-start">
 								<div  class="p-2 col-md-12 d-inline-block align-top flex-column">
@@ -163,11 +195,11 @@
 											      <a id="week2" class="mr-sm-1"><%=submission.week2%> hrs<a>
 											    </div>
 											    <div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="missed"><strong>Missed</strong></label>
+											      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any."class="my-1 mr-2" for="missed"><strong>Unreported</strong></label>
 											      <a id="missed" class="mr-sm-1"><%=submission.missed%> hrs<a>
 											    </div>
 											    <div class="form-group mb-1">
-											      <label class="my-1 mr-2" name="total" for="Total"><strong>Total</strong></label>
+											      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2."class="my-1 mr-2" for="total"><strong>Total</strong></label>
 											      <a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hrs</a>
 											    </div>
 											    <div class="p-3 form-group mb-1">
@@ -176,8 +208,8 @@
 											</div>
 											<div class="d-flex col-md-8 flex-column">
 												<div class="flex-column">
-											      	<label class="p-1 align-self-start" for="justification"><strong>Justification/Tasks Developed</strong></label>
-													<p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"> <%=submission.description%><p>
+											      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
+													<p class="p-2 flex-fill rounded border border-dark" name="justification" id="justification" wrap="hard"> <%=submission.description%><p>
 												</div>
 												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
 													<p class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></p>
@@ -188,28 +220,29 @@
 										<form class="form-inline align-items-stretch" action="/reportByManager" method="POST">
 											<div class="col-md-4 form-column">
 												<div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="week1">Week 1</label>
+											      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
 											      <input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
 											    </div>
 											    <div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="week2">Week 2</label>
+											      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
 											      <input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
 											    </div>
 											    <div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="missed">Missed</label>
+											      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any."class="my-1 mr-2" for="missed"><strong>Unreported</strong></label>
 											      <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
 											    </div>
 											    <div class="p-3 form-group mb-1">
-											      <label class="my-1 mr-2" name="total" for="Total">Total</label>
+											      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2."class="my-1 mr-2" for="total"><strong>Total</strong></label>
 											      <a name="total" id="total"><%=submission.total%> hrs</a>
 											    </div>
 											</div>
 											<div class="col-md-8 form-column">
 												<div class="flex-column">
-											      	<label class="p-1 align-self-start" for="justification">Justification/Tasks Developed</label>
-													<textarea class="p-2 flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
+											      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
+													<textarea class="p-2 flex-fill rounded border border-dark" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
 													<input type="text" name="subId" hidden value="<%=submission.id%>">
-													<input type="text" name="internId" hidden value="<%=user.id%>">
+						                    		<input type="text" name="internId" hidden value="<%=user.id%>">
+						                    		<input type="text" name="approverName" hidden value="<%=manager.name%>">
 													<div id="buttondiv" class="p-1 flex-fill justify-content-end">
 											    		<button type="submit" id="submit" class="align-self-end btn btn-success">Approve</button>
 									    			</div>
@@ -237,6 +270,8 @@
   	</footer>
 	
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script type="text/javascript" src="../js/dashboard.js"></script>
 </body>
 </html>
