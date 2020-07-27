@@ -1,3 +1,18 @@
+body {
+    font-family: 'acumin-pro', sans-serif;
+    font-size:14px;
+    background-color: #FFF !important;
+    margin-bottom: 85px !important;
+   /*  font-family: 'wpsmicomoon';
+    src:url('fonts/wpsmicomoon.eot?-n2fq81');
+    src:url('fonts/wpsmicomoon.eot?#iefix-n2fq81') format('embedded-opentype'),
+        url('fonts/wpsmicomoon.woff?-n2fq81') format('woff'),
+        url('fonts/wpsmicomoon.ttf?-n2fq81') format('truetype'),
+        url('fonts/wpsmicomoon.svg?-n2fq81#wpsmicomoon') format('svg');
+    font-weight: normal;
+    font-style: normal; */
+}
+
 textarea {
 	width: 100%;
 	resize:none;
@@ -6,11 +21,11 @@ textarea {
     appearance: textfield;
 }
 
-table {
+/* table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-}
+} */
 
 td, th {
     border: 1px solid #dddddd;
@@ -18,8 +33,28 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-child(even) {
+/* tr:nth-child(even) {
     background-color: #dddddd;
+} */
+
+h1 {
+    color: #FFF;
+}
+
+.badge {
+    height: 100%;
+}
+
+.jumbotron {
+    background-color: #000000;
+}
+
+.jumbotron p {
+    color: #FFF;
+}
+
+.navbar-dark.bg-dark {
+    background-color: #000000 !important;
 }
 
 .footer {
@@ -51,6 +86,11 @@ tr:nth-child(even) {
     display: inline-block;
 }
 
+#pp_frame {
+    background-color: #FFF !important;
+    font-family: 'acumin-pro', sans-serif;
+}
+
 #profile_picture {
     display: none;
     border-radius: 36px;
@@ -75,7 +115,11 @@ tr:nth-child(even) {
 
 #ppdiv {
     width: 100%;
+    background-color: #f2f2f2 !important;
+}
 
+#profile_section {
+    background-color: #f2f2f2 !important;
 }
 
 #ppnum {
@@ -88,6 +132,7 @@ tr:nth-child(even) {
 #justification {
 	height: 100%;
 	width: 100%;
+    background-color: #FFF !important;
 }
 
 #image_div {
