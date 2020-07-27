@@ -34,5 +34,16 @@ module.exports = {
 				}); 
 			} 
 		});
+	},
+
+	bestTotal: async function suggestTotal(currentTotal, numWeeks) {
+		let recommendedTotal = 7.5*(numWeeks + 2) - currentTotal;
+		if(recommendedTotal < 0){
+			return 0
+		} else if (recommendedTotal > 15){
+			return 15
+		} else {
+			return recommendedTotal
+		}
 	}
 };
