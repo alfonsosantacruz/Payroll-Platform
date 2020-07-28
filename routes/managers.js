@@ -30,6 +30,7 @@ router.get("/home", isLoggedIn, async function(req, res){
 	var absoluteEmail = res.locals.email,
 		currentPP = await gsheetAPIs.ppName();
 	console.log(currentPP);
+	console.log(res.locals);
 	Manager.findOne({email: absoluteEmail}, function(err, manager){
 		if(err) {
 			console.log(err);
@@ -128,8 +129,11 @@ router.post("/editByManager", function(req, res){
 
 
 router.post("/manageredit", function(req, res){
-	const subId = req.body.subId;
+	const subId = req.body.subId,
+		sTopVal = req.body.sTopVal;
 	console.log(subId);
+	console.log(sTopVal);
+	res.locals.scrollTop = sTopVal;
 	Submission.findOne({_id: subId}, function(err, foundSubmission){
 		if(err) {
 			console.log(err);
@@ -152,7 +156,7 @@ router.post("/reportByManager", function(req, res){
 			reportedWeek2 = parseFloat(req.body.week2),
 		 	reportedMissed = parseFloat(req.body.missed),
 		 	reportedTotal = reportedWeek1 + reportedWeek2 + reportedMissed,
-		 	reportedJustification = req.body.justification,
+		 	reportedJustification = req.body.justification.replace(/(\r\n|\n|\r)/gm, ""),
 		 	subId = req.body.subId,
 		 	submissionDate = (new Date()).toString(),
 		 	approver = req.body.approverName,
@@ -198,12 +202,15 @@ router.post("/approve", function(req, res){
 			reportedWeek2 = parseFloat(req.body.week2),
 		 	reportedMissed = parseFloat(req.body.missed),
 		 	reportedTotal = reportedWeek1 + reportedWeek2 + reportedMissed,
-		 	reportedJustification = req.body.justification,
+		 	reportedJustification = req.body.justification.replace(/(\r\n|\n|\r)/gm, ""),
 		 	subId = req.body.subId,
 		 	approvalDate = (new Date()).toString(),
 		 	approver = req.body.approverName,
+		 	sTopVal = req.body.sTopVal,
 		 	internId = req.body.internId;
 	console.log('Triggered approve route');
+	console.log(sTopVal);
+	res.locals.scrollTop = sTopVal;
 	Submission.findOne({_id: subId}, function(err, foundSubmission){
 		if(err) {
 			console.log(err);
@@ -352,6 +359,7 @@ router.post("/toggleViewProfile", isLoggedIn, function(req, res){
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
     	console.log(req.user.email);
+    	console.log(req.body);
     	res.locals.email = req.user.email;
         return next();
     }
