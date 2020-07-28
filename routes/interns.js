@@ -45,7 +45,8 @@ router.get("/schedule", isLoggedIn, async (req, res, next) => {
 				} else {
 					try {
 						const rows = await gsheetAPIs.scheduleSheet();
-						res.render("schedule", {rows:rows, user:'Intern'});
+						const weekNum = await gsheetAPIs.getWeekNum();
+						res.render("schedule", {rows:rows, user:'Intern', weekNum: weekNum});
 					} catch(err) {
 						console.log(err);
 						next(err);
@@ -55,7 +56,8 @@ router.get("/schedule", isLoggedIn, async (req, res, next) => {
 		} else {
 			try {
 				const rows = await gsheetAPIs.scheduleSheet();
-				res.render("schedule", {rows: rows, user: 'Manager'});
+				const weekNum = await gsheetAPIs.getWeekNum();
+				res.render("schedule", {rows: rows, user: 'Manager', weekNum: weekNum});
 			} catch(err) {
 				console.log(err);
 				next(err);
@@ -63,6 +65,7 @@ router.get("/schedule", isLoggedIn, async (req, res, next) => {
 		}
 	});
 });
+
 
 
 router.get("/submissions", isLoggedIn, function(req, res){
@@ -75,6 +78,11 @@ router.get("/submissions", isLoggedIn, function(req, res){
 			res.render("dashboard", {user: intern});
 		}
 	});
+});
+
+
+router.get("/budgetapp", isLoggedIn, function(req, res){
+	res.render("budget");
 });
 
 
@@ -105,7 +113,7 @@ router.post("/report", isLoggedIn, function(req, res){
 			reportedWeek2 = parseFloat(req.body.week2),
 		 	reportedMissed = parseFloat(req.body.missed),
 		 	reportedTotal = reportedWeek1 + reportedWeek2 + reportedMissed,
-		 	reportedJustification = req.body.justification,
+		 	reportedJustification = req.body.justification.replace(/(\r\n|\n|\r)/gm, ""),
 		 	subId = req.body.subId,
 		 	submissionDate = (new Date()).toString(),
 		 	absoluteEmail = res.locals.email;
