@@ -1,20 +1,4 @@
-<html>
-<head>
-	<title>MiPay Directory</title>
-	<base href="/">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<link rel="stylesheet" type='text/css' href="static/static.css">
-    <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
-</head>
-<body>
-	<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark">
-		<a class="navbar-brand" href="/">
-		    <img src="/img/mskgi_logo.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
-		    Work Study Platform
-		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    		<span class="navbar-toggler-icon"></span>
-  		</button>
+<%- include("./partials/header.ejs") %>
 
 	  	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 	   	 	<ul class="navbar-nav mr-auto">
@@ -44,14 +28,14 @@
 	      <p>Their Personal Info and Basic Stats in One Place. For further information about each intern, feel free to access their personal profiles by clicking on his/her name.</p>
 	    </div>
 	   	<div class="p-4 col-lg-12">
-			<table class="table">
+			<table class="table table-hover">
 				<thead class="thead-light">
 					<tr>
-						<th>Full Name</th>
-						<th>Email</th>
-						<th>Role</th>
-						<th>Total Hours</th>
-						<th>Average</th>
+						<th class='text-center align-middle'>Full Name</th>
+						<th class='text-center align-middle'>Email</th>
+						<th class='text-center align-middle'>Role</th>
+						<th class='text-center align-middle'>Total Hours</th>
+						<th class='text-center align-middle'>Average</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -62,9 +46,9 @@
 								<td class="d-flex justify-content-between">
 									<a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
 									<%if((15*(intern.submissions.length + 1) - intern.totalHours) > 0){%>
-		    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="AverageYTD above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+		    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 		    						<%} else {%>
-		    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="AverageYTD above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be 0 to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+		    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 		    						<%}%>
 						<%} else {%>
 							<tr>
@@ -72,10 +56,10 @@
 						<%}%>
 							</td>
 							<!-- <td><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a></td> -->
-							<td><%=intern.email%></td>
-							<td><%=intern.role%></td>
-							<td><%=intern.totalHours%></td>
-							<td><%=intern.average%></td>
+							<td class='text-center align-middle'><%=intern.email%></td>
+							<td class='text-center align-middle'><%=intern.role%></td>
+							<td class='text-center align-middle'><%=intern.totalHours%> hrs</td>
+							<td class='text-center align-middle'><%=intern.average%> hrs</td>
 						</tr>
 					<%});;%>
 				</tbody>
@@ -84,18 +68,4 @@
 	</div>
 	<div class="content-wrapper"></div>
 
-	<footer class="footer">
-	    <div>
-	       Copyright © Minerva Project, Inc. All Rights Reserved.&nbsp;&nbsp;&nbsp;
-	    </div>
-	    <div>
-	       <a id="mp-footer-terms" href="https://minerva.kgi.edu/terms/">Terms and Conditions</a> • <a id="mp-footer-privacy" href="https://minerva.kgi.edu/privacy/">Privacy Policy</a>
-	    </div>
-  	</footer>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-<script type="text/javascript" src="../js/dashboard.js"></script>
-</body>
-</html>
+<%- include("./partials/footer.ejs") %>
