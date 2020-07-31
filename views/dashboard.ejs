@@ -1,20 +1,4 @@
-<html>
-<head>
-	<title>WS_Portal</title>
-	<base href="/">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<link rel="stylesheet" type='text/css' href="static/static.css">
-    <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
-</head>
-<body>
-	<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark">
-		<a class="navbar-brand" href="/">
-		    <img src="/img/mskgi_logo.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
-		    Work Study Platform
-		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    		<span class="navbar-toggler-icon"></span>
-  		</button>
+<%- include("./partials/header.ejs") %>
 
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
@@ -40,16 +24,16 @@
 	  </div>
 	</nav>
 
-	<div class="d-flex p-4 row">
+	<div class="d-flex col-md-12 p-4 row">
 		<div class="p-2 col-md-2 rounded border border-dark" id="profile_section">
 			<div class="d-flex justify-content-center p-2 bd-highlight"><img src="<%=user.imagePath%>" id = "profile_picture" class="d-inline-block align-top border border-dark" alt="" loading="lazy"></div>
 			<div class="d-flex justify-content-center p-3 bd-highlight" id = "full_name"><a><strong><%=user.name%></strong></a></div>
 			<% if(user.average > 7.5){ %>
 				<div class="d-flex justify-content-center p-3 bd-highlight">
 					<%if((15*(user.submissions.length + 1) - user.totalHours) > 0){%>
-						<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="AverageYTD above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(user.submissions.length + 1) - user.totalHours%> to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+						<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(user.submissions.length + 1) - user.totalHours%> to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 					<%} else {%>
-						<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="AverageYTD above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+						<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="AverageYTD above expected" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 					<%}%> 
 				</div>
 			<%}%>
@@ -63,211 +47,205 @@
 				<%}%>
 			</div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Role:</strong> <%=user.role%><a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Team:</strong> Finance<a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Project:</strong> Work Study Payroll Platform<a></div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager:</strong> <%=user.manager%></a></div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Manager Email:</strong> <%=user.managerEmail%></a></div>
 			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Total Hours:</strong> <%=user.totalHours%> hrs</a></div>
-			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>Average:</strong> <%=user.average%> hrs</a></div>
+			<div class="d-flex justify-content-left p-2 bd-highlight" id = "Stats title"><a><strong>AverageYTD:</strong> <%=user.average%> hrs</a></div>
 		</div>
 
 		<!-- Cards Container-->
-		<div class="row col-md-10">
+		<div class="container col-md-10">
+			<div class="row">
 
-			<%if (user.viewPreference == "Rows") {%>
-				<div class="p-4 col-md-12">
-					<table class="table">
-						<thead class="thead-light">
-							<tr>
-								<th>Pay Period</th>
-								<th>Week 1</th>
-								<th>Week 2</th>
-								<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any.">Unreported</th>
-								<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2.">Total</th>
-								<th>Tasks Completed</th>
-								<th>Date Approved</th>
-								<th>Approved By</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%user.submissions.forEach(function(submission){%>
-	    						<%if(submission.total > 15){%>
-	    							<tr class="table-warning">
-										<td>
-											<a><%=submission.pp%></a>
-											<div class="d-flex justify-content-end">
-												<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
-											</div>
-								<%} else {%>
-									<tr>
-	    								<td>
-											<a><%=submission.pp%></a>
-								<%}%>
-										</td>
-										<%if(submission.submitted == false){%>
-											<form action="/report" method="POST" id="approval">
-												<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
-												<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
-												<td><input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
-												<td><a name="total" id="total"><%=submission.total%> hrs</a></td>
-												<td><textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
-
-												<td></td>
-												<td></td>
-
-												<td>
-													<div class="p-3 d-flex align-items-end mt-auto col-lg-3">
-								                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
-								                    	<input type="text" name="internId" hidden value="<%=user.id%>">
-								                      	<button type="submit" id="submit" form="approval" class="align-self-end btn btn-success">Submit</button>
-								                	</div>
-								                </td>
-									        </form>
-							            	
-										<%} else {%>
-											<td><%=submission.week1%> hrs</td>
-											<td><%=submission.week2%> hrs</td>
-											<td><%=submission.missed%> hrs</td>
-											<td><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
-											<td><p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"><%=submission.description%></p></td>
-
-											<td><%=submission.dateApproved%></td>
-											<td><%=submission.approvedBy%></td>
-
-											<td>
-												<%if(submission.ppClosed == false && submission.approved == false && submission.submitted == true){%>
-													<form action="/edit" method="POST">
-														<div class="d-flex justify-content-center"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
-													</form>
-												<%} else {%>
-													<div class="d-flex justify-content-center"><a>N/A</a></div>
-												<%}%>
-							                </td>
-										<%}%>
-									</tr>
-							<%});%>
-						</tbody>
-					</table>
-				</div>
-
-			<%} else {%>
-
-				<!-- Starts new card-->
-				<%user.submissions.forEach(function(submission){%>
-					<!-- Starts new card-->
-					<div class="p-1 col-md-6">
-						<div id="ppdiv" class="col-md-12 rounded border border-dark">
-							<div id="pptitle" class="p-2 col-md-12">
-					
-
-								<div class="p-1 row justify-content-end">
-									<%if(submission.total > 15){%>
-					    				<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
-					    			<%}%>						    		
-									<%if(submission.ppClosed == false && submission.approved == false && submission.submitted == true){%>
-										<form action="/editByManager" method="POST">
-											<input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button>
-										</form>
-									<%};%>
-								</div>
-								<div id="pp_frame" class="d-flex rounded border border-dark col-md-12 justify-content-center"><a name="pp" class="p-1"><strong><%=submission.pp%></strong></a></div>
-
-
-							</div>
-							<div class="col-md-12 justify-content-start">
-								<div  class="p-2 col-md-12 d-inline-block align-top flex-column">
-									<%if(submission.submitted == true){%>
-										<div class="form-inline align-items-stretch">
-											<div class="d-flex col-md-4 flex-column">
-												<div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
-											      <a id="week1" class="mr-sm-1"><%=submission.week1%> hrs</a>
-											    </div>
-											    <div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
-											      <a id="week2" class="mr-sm-1"><%=submission.week2%> hrs</a>
-											    </div>
-											    <div class="form-group mb-1">
-											      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any."class="my-1 mr-2" for="missed"><strong>Unreported</strong></label>
-											      <a id="missed" class="mr-sm-1"><%=submission.missed%> hrs</a>
-											    </div>
-											    <div class="form-group mb-1">
-											       <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2."class="my-1 mr-2" for="total"><strong>Total</strong></label>
-											      <a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hrs</a>
-											    </div>
-											    <%if (submission.approved == true) {%>
-											    	<div class="p-2 form-group mb-1">
-														<p class="align-self-end" id="dateSubmitted"><strong>Approved by:</strong> <%=submission.approvedBy%></p>
-												    </div>
-											    <%}%>
-											</div>
-											<div class="d-flex col-md-8 flex-column">
-												<div class="flex-column">
-											      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
-													<p class="p-2 flex-fill rounded border border-dark" name="justification" id="justification" wrap="hard"> <%=submission.description%></p>
-													<!-- <input type="text" name="subId" hidden value="<%=submission.id%>"> -->
+				<%if (user.viewPreference == "Rows") {%>
+					<div class="p-4 col-md-12">
+						<table class="table table-sm table-hover">
+							<thead class="thead-light">
+								<tr>
+									<th class='text-center align-middle'>Pay Period</th>
+									<th class='text-center align-middle'>Week 1</th>
+									<th class='text-center align-middle'>Week 2</th>
+									<th class='text-center align-middle' tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any.">Unreported</th>
+									<th class='text-center align-middle' tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="This represents the total amount of hours reported for THIS pay period only. It is the sum of Week 1, Week 2 and Unreported for THIS pay period ONLY.">Total</th>
+									<th class='text-center align-middle'>Tasks Completed</th>
+									<th class='text-center align-middle'>Date Approved</th>
+									<th class='text-center align-middle'>Approved By</th>
+									<th class='text-center align-middle'>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%user.submissions.forEach(function(submission){%>
+		    						<%if(submission.total > 15){%>
+		    							<tr class="table-warning">
+											<td class='text-center align-middle'>
+												<a><%=submission.pp%></a>
+												<div class="d-flex justify-content-end">
+													<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeds Total hours worked on THIS Pay Period" data-content="This means the intern worked more than 15 hours on this Pay Period. Remember that each intern should work no more than 7.5 hours per week. However, this is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
 												</div>
-												<div id="buttondiv" class="p-1 flex-fill justify-content-end">
-													<%if(submission.approved == false){%>
-														<a class="align-self-end" id="dateSubmitted"><strong>Date Submitted:</strong> <%=submission.dateSubmitted%></a>
-													<%} else {%>
-														<a class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></a>
-													<%};%>
-								    			</div>
-											</div>
-										</div>
 									<%} else {%>
-										<form class="form-inline align-items-stretch" action="/report" method="POST">
-											<div class="col-md-4 form-column">
-												<div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
-											      <input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
-											    </div>
-											    <div class="form-group mb-1">
-											      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
-											      <input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
-											    </div>
-											    <div class="form-group mb-1">
-											      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any."class="my-1 mr-2" for="missed"><strong>Unreported</strong></label>
-											      <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
-											    </div>
-											    <div class="p-3 form-group mb-1">
-											       <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1, Week 2 and missed."class="my-1 mr-2" for="total"><strong>Total</strong></label>
-											      <a name="total" id="total"><%=submission.total%> hrs</a>
-											    </div>
-											</div>
-											<div class="col-md-8 form-column">
-												<div class="flex-column">
-											      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
-													<textarea class="p-2 flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
-													<input type="text" name="subId" hidden value="<%=submission.id%>">
+										<tr>
+		    								<td class='text-center align-middle'>
+												<a><%=submission.pp%></a>
+									<%}%>
+											</td>
+											<%if(submission.submitted == false){%>
+												<form action="/report" method="POST" id="approval">
+													<td class='text-center align-middle'><input type="number" class="form-control col-md-12 mr-sm-1 border border-dark" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
+													<td class='text-center align-middle'><input type="number" class="form-control col-md-12 mr-sm-1 border border-dark" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
+													<td class='text-center align-middle'><input type="number" min="0" class="form-control col-md-12 mr-sm-1 border border-dark" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
+													<td class='text-center align-middle'><a name="total" id="total"><%=submission.total%> hrs</a></td>
+													<td class='w-25 text-left align-middle'><textarea class="p-2 text-left" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
+
+													<td class='text-center align-middle'></td>
+													<td class='text-center align-middle'></td>
+
+													<td class='text-center align-middle'>
+														<div class="p-3 d-flex align-items-end mt-auto col-lg-3">
+									                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
+									                    	<input type="text" name="internId" hidden value="<%=user.id%>">
+									                      	<button type="submit" id="submit" form="approval" class="align-self-end btn btn-success">Submit</button>
+									                	</div>
+									                </td>
+										        </form>
+								            	
+											<%} else {%>
+												<td class='text-center align-middle'><%=submission.week1%> hrs</td>
+												<td class='text-center align-middle'><%=submission.week2%> hrs</td>
+												<td class='text-center align-middle'><%=submission.missed%> hrs</td>
+												<td class='text-center align-middle'><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
+												<td class='text-center align-middle'><p class="p-2 flex-fill border text-left border dark" name="justification" id="justification" wrap="hard"><%=submission.description%></p></td>
+
+												<td class='text-center align-middle'><%=submission.dateApproved%></td>
+												<td class='text-center align-middle'><%=submission.approvedBy%></td>
+
+												<td class='text-center align-middle'>
+													<%if(submission.ppClosed == false && submission.approved == false && submission.submitted == true){%>
+														<form action="/edit" method="POST">
+															<div class="d-flex justify-content-center"><input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button></div>
+														</form>
+													<%} else {%>
+														<div class="d-flex justify-content-center"><a>N/A</a></div>
+													<%}%>
+								                </td>
+											<%}%>
+										</tr>
+								<%});%>
+							</tbody>
+						</table>
+					</div>
+
+				<%} else {%>
+
+					<!-- Starts new card-->
+					<%user.submissions.forEach(function(submission){%>
+						<!-- Starts new card-->
+						<div class="p-1 col-md-6">
+	<!-- 						<div id="ppdiv" class="col-md-12 rounded border border-dark">
+								<div id="pptitle" class="p-2 col-md-12">
+									<div class="p-1 row justify-content-end"> -->
+
+										<%if(submission.total > 15){%>
+											<div id="ppdiv" class="col-md-12 rounded border border-warning">
+												<div id="pptitle" class="p-2 col-md-12">
+													<div class="p-1 row justify-content-end">
+						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeds Total hours worked on THIS Pay Period" data-content="This means the intern worked more than 15 hours on this Pay Period. Remember that each intern should work no more than 7.5 hours per week. However, this is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
+						    			<%} else {%>
+						    				<div id="ppdiv" class="col-md-12 rounded border border-dark">
+												<div id = "pptitle" class="col-md-12">
+													<div class="p-1 row justify-content-end">
+						    			<%}%>							    		
+														<%if(submission.ppClosed == false && submission.approved == false && submission.submitted == true){%>
+															<form action="/edit" method="POST">
+																<input type="text" name="subId" hidden value="<%=submission.id%>"><input type="text" name="internId" hidden value="<%=user.id%>"><button type="submit" class="fas fa-edit"></button>
+															</form>
+														<%};%>
+													</div>
+													<div id="pp_frame" class="d-flex rounded border border-dark col-md-12 justify-content-center"><a name="pp" class="p-1"><strong><%=submission.pp%></strong></a></div>
+												</div>
+								<div class="col-md-12 justify-content-start">
+									<div  class="p-2 col-md-12 d-inline-block align-top flex-column">
+										<%if(submission.submitted == true || submission.approved == true){%>
+											<div class="form-inline align-items-stretch">
+												<div class="d-flex col-md-4 flex-column">
+													<div class="form-group mb-1">
+												      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
+												      <a id="week1" class="mr-sm-1"><%=submission.week1%> hrs</a>
+												    </div>
+												    <div class="form-group mb-1">
+												      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
+												      <a id="week2" class="mr-sm-1"><%=submission.week2%> hrs</a>
+												    </div>
+												    <div class="form-group mb-1">
+												      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any."class="my-1 mr-2" for="missed"><strong>Unreported</strong></label>
+												      <a id="missed" class="mr-sm-1"><%=submission.missed%> hrs</a>
+												    </div>
+												    <div class="form-group mb-1">
+												       <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for THIS pay period only. It is the sum of Week 1, Week 2 and Unreported for THIS pay period ONLY."class="my-1 mr-2" for="total"><strong>Total</strong></label>
+												      <a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hrs</a>
+												    </div>
+												    <%if (submission.approved == true) {%>
+												    	<div class="p-2 form-group mb-1">
+															<p class="align-self-end" id="dateSubmitted"><strong>Approved by:</strong> <%=submission.approvedBy%></p>
+													    </div>
+												    <%}%>
+												</div>
+												<div class="d-flex col-md-8 flex-column">
+													<div class="flex-column">
+												      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
+														<p class="p-2 text-left rounded border border-dark" name="justification" id="justification" wrap="hard"> <%=submission.description%></p>
+														<!-- <input type="text" name="subId" hidden value="<%=submission.id%>"> -->
+													</div>
 													<div id="buttondiv" class="p-1 flex-fill justify-content-end">
-											    		<button type="submit" id="submit" class="align-self-end btn btn-success">Submit</button>
+														<%if(submission.approved == false){%>
+															<a class="align-self-end" id="dateSubmitted"><strong>Date Submitted:</strong> <%=submission.dateSubmitted%></a>
+														<%} else {%>
+															<a class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></a>
+														<%};%>
 									    			</div>
-											    </div>
+												</div>
 											</div>
-										</form>
-									<%};%>
+										<%} else {%>
+											<form class="form-inline align-items-stretch" action="/report" method="POST">
+												<div class="col-md-4 form-column">
+													<div class="form-group mb-1">
+												      <label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
+												      <input type="number" class="form-control col-md-12 mr-sm-1 border border-dark" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
+												    </div>
+												    <div class="form-group mb-1">
+												      <label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
+												      <input type="number" class="form-control col-md-12 mr-sm-1 border border-dark" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
+												    </div>
+												    <div class="form-group mb-1">
+												      <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any."class="my-1 mr-2" for="missed"><strong>Unreported</strong></label>
+												      <input type="number" min="0" class="form-control col-md-12 mr-sm-1 border border-dark" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
+												    </div>
+												    <div class="p-3 form-group mb-1">
+												       <label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for THIS pay period only. It is the sum of Week 1, Week 2 and Unreported for THIS pay period ONLY."class="my-1 mr-2" for="total"><strong>Total</strong></label>
+												      <a name="total" id="total"><%=submission.total%> hrs</a>
+												    </div>
+												</div>
+												<div class="col-md-8 form-column">
+													<div class="flex-column">
+												      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
+														<textarea class="p-2 text-left flex-fill" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
+														<input type="text" name="subId" hidden value="<%=submission.id%>">
+														<div id="buttondiv" class="d-flex p-1 flex-fill justify-content-end">
+												    		<button type="submit" id="submit" class="align-self-end btn btn-success">Submit</button>
+										    			</div>
+												    </div>
+												</div>
+											</form>
+										<%};%>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				<%});%>
-			<%}%>
+					<%});%>
+				<%}%>
+			</div>
 		</div>
 	</div>
 
-	<footer class="footer">
-	    <div>
-	       Copyright © Minerva Project, Inc. All Rights Reserved.&nbsp;&nbsp;&nbsp;
-	    </div>
-	    <div>
-	       <a id="mp-footer-terms" href="https://minerva.kgi.edu/terms/">Terms and Conditions</a> • <a id="mp-footer-privacy" href="https://minerva.kgi.edu/privacy/">Privacy Policy</a>
-	    </div>
-  	</footer>
-	
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-<script type="text/javascript" src="../js/dashboard.js"></script>
-</body>
-</html>
+<%- include("./partials/footer.ejs") %>
