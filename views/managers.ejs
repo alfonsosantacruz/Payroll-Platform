@@ -1,20 +1,4 @@
-<html>
-<head>
-	<title>WS_Portal</title>
-	<base href="/">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<link rel="stylesheet" type='text/css' href="static/static.css">
-    <link rel="stylesheet" type='text/css' href="static/fontawesome-free-5.13.0-web/css/all.css">
-</head>
-<body>
-	<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark">
-		<a class="navbar-brand" href="/">
-		    <img src="/img/mskgi_logo.png" width="30" height="30" class="d-inline-block align-top" loading=lazy>
-		    Work Study Platform
-		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    		<span class="navbar-toggler-icon"></span>
-  		</button>
+<%- include("./partials/header.ejs") %>
 
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
@@ -52,32 +36,35 @@
 	    </form>
 	  </div>
 	</nav>
-	    
-    <%if (manager.viewPreference == "Rows") {%>
-    	<div class="container">
-		    <div class="jumbotron">
-			    <h1>Work Study Manager Dashboard</h1>
-			    <p>Hello <%=manager.name%>, you are looking at <%=currentPP%></p>
-		    </div>
+	       
+
+	<div class="container">
+	    <div class="jumbotron">
+		    <h1>Work Study Manager Dashboard</h1>
+		    <p>Hello <%=manager.name%>, you are looking at <%=currentPP%></p>
+	    </div>
+
+	 <%if (manager.viewPreference == "Rows") {%>
+
 		</div>
 
     	<div class="p-4 col-lg-12">
-			<table class="table">
+			<table class="table table-sm table-hover">
 				<thead class="thead-light">
 					<tr>
-						<th>Full Name</th>
-						<th>Email</th>
-						<th>Role</th>
-						<th>Week 1</th>
-						<th>Week 2</th>
-						<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any.">Unreported</th>
-						<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2.">Total</th>
-						<th>Tasks Completed</th>
-						<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does TotalYTD mean?" data-content="This variable indicates the total amount of hours reported since the beginning of the Academic Year">Total Hours YTD</th>
-						<th tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does AverageYTD mean?" data-content="This variable indicates the average worked hours per week, as reported by the intern. It considers the total hours reported and the start date of the internship. This value should not be higher than 7.5 hrs/wk" class="my-1 mr-2" name="average">Average</th>
-						<th>Date Approved</th>
-						<th>Approved By</th>
-						<th>Action</th>
+						<th class='text-center align-middle'>Full Name</th>
+						<!-- <th class='text-center align-middle'>Email</th> -->
+						<th class='text-center align-middle'>Role</th>
+						<th class='text-center align-middle'>Week 1</th>
+						<th class='text-center align-middle'>Week 2</th>
+						<th class='text-center align-middle' tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any.">Unreported</th>
+						<th class='text-center align-middle' tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for THIS pay period only. It is the sum of Week 1, Week 2 and Unreported for THIS pay period ONLY.">Total</th>
+						<th class='text-center align-middle'>Tasks Completed</th>
+						<th class='text-center align-middle' tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does TotalYTD mean?" data-content="This variable indicates the total amount of hours reported since the beginning of the Academic Year.">Total Hours YTD</th>
+						<th class='text-center align-middle' tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" title="What does AverageYTD mean?" data-content="This variable indicates the average worked hours per week for the entire Academic Year. It considers the total hours reported since the start date of the internship. This value SHOULD NOT be higher than 7.5 hrs/wk." class="my-1 mr-2" name="average">AverageYTD</th>
+						<th class='text-center align-middle'>Date Approved</th>
+						<th class='text-center align-middle'>Approved By</th>
+						<th class='text-center align-middle'>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -88,42 +75,41 @@
 		    						<form action="/approve" method="POST" id="approval-<%=submission.id%>">
 			    						<%if(intern.average > 7.5){%>
 											<tr class="table-danger">
-												<td><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
+												<td class='text-center align-middle'><a class='align-self-center' href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
 													<div class="p-2 d-flex justify-content-center">
 														<%if((15*(intern.submissions.length + 1) - intern.totalHours) > 0){%>
-							    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+							    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 							    						<%} else {%>
-							    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be 0 to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+							    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 							    						<%}%>
 							    					</div>
 			    						<%} else if(submission.total > 15){%>
 			    							<tr class="table-warning">
-												<td><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
+												<td class='text-center align-middle'><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
 													<div class="p-2 d-flex justify-content-center">
-														<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
+														<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeds Total hours worked on THIS Pay Period" data-content="This means the intern worked more than 15 hours on this Pay Period. Remember that each intern should work no more than 7.5 hours per week. However, this is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
 													</div>
 			    						<%} else {%>
 			    							<tr>
-												<td><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
+												<td class='text-center align-middle'><a class='align-self-center' href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
 										<%}%>
 											</td>
-											<td><%=intern.email%></td>
-											<td><%=intern.role%></td>
+											<!-- <td class='text-center align-middle'><%=intern.email%></td> -->
+											<td class='text-center align-middle'><%=intern.role%></td>
+											<td class='text-center align-middle'><input type="number" class="form-control border border-dark" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
+											<td class='text-center align-middle'><input type="number" class="form-control border border-dark" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
+											<td class='text-center align-middle'><input type="number" min="0" class="form-control border border-dark" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
+											<td class='text-center align-middle'><a name="total" id="total"><%=submission.total%> hrs</a></td>
+											<td class='w-25 h-75 text-center align-middle'><textarea class="text-left" name="justification" id="justification" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
 
-											<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required></td>
-											<td><input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required></td>
-											<td><input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required></td>
-											<td><a name="total" id="total"><%=submission.total%> hrs</a></td>
-											<td><textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea></td>
 
+											<td class='text-center align-middle'><%=intern.totalHours%> hrs</td>
+											<td class='text-center align-middle'><%=intern.average%> hrs</td>
 
-											<td><%=intern.totalHours%></td>
-											<td><%=intern.average%></td>
+											<td class='text-center align-middle'></td>
+											<td class='text-center align-middle'></td>
 
-											<td></td>
-											<td></td>
-
-											<td>
+											<td class='text-center align-middle'>
 												<div class="d-flex align-items-end mt-auto">
 							                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
 							                    	<input type="text" name="internId" hidden value="<%=intern.id%>">
@@ -139,39 +125,39 @@
 											<td><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
 												<div class="p-2 d-flex justify-content-center">
 													<%if((15*(intern.submissions.length + 1) - intern.totalHours) > 0){%>
-						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
-						    						<%} else {%>
-						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be 0 to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
+							    					<%} else {%>
+					    								<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 						    						<%}%>
 						    					</div>
 		    						<%} else if(submission.total > 15){%>
 		    							<tr class="table-warning">
-											<td><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
+											<td class='text-center align-middle'><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
 												<div class="p-2 d-flex justify-content-center">
-													<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
+													<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeds Total hours worked on THIS Pay Period" data-content="This means the intern worked more than 15 hours on this Pay Period. Remember that each intern should work no more than 7.5 hours per week. However, this is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
 												</div>
 		    						<%} else {%>
 		    							<tr>
-											<td><a href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
+											<td class='text-center align-middle'><a class='align-self-center' href="/submissions/<%=intern.id%>" onclick="document.getElementById('<%=intern.id%>').submit()"><%=intern.name%></a>
 									<%}%>
 										</td>
-										<td><%=intern.email%></td>
-										<td><%=intern.role%></td>
+										<!-- <td class='text-center align-middle'><%=intern.email%></td> -->
+										<td class='text-center align-middle'><%=intern.role%></td>
 
-										<td><%=submission.week1%> hrs</td>
-										<td><%=submission.week2%> hrs</td>
-										<td><%=submission.missed%> hrs</td>
-										<td><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
-										<td><p class="p-2 flex-fill border border dark" name="justification" id="justification" wrap="hard"><%=submission.description%></p></td>
+										<td class='text-center align-middle'><%=submission.week1%> hrs</td>
+										<td class='text-center align-middle'><%=submission.week2%> hrs</td>
+										<td class='text-center align-middle'><%=submission.missed%> hrs</td>
+										<td class='text-center align-middle'><%=submission.week1 + submission.week2 +submission.missed%> hrs</td>
+										<td class='text-center align-middle'><p class="p-1 text-left border border dark" name="justification" id="justification" wrap="hard"><%=submission.description%></p></td>
 
 
-										<td><%=intern.totalHours%> hrs</td>
-										<td><%=intern.average%> hrs</td>
+										<td class='text-center align-middle'><%=intern.totalHours%> hrs</td>
+										<td class='text-center align-middle'><%=intern.average%> hrs</td>
 
-										<td><%=submission.dateApproved%></td>
-										<td><%=submission.approvedBy%></td>
+										<td class='text-center align-middle'><%=submission.dateApproved%></td>
+										<td class='text-center align-middle'><%=submission.approvedBy%></td>
 
-										<td>
+										<td class='text-center text-wrap align-middle'>
 											<%if(submission.approvalClosed == false){%>
 												<form action="/manageredit" method="POST">
 													<div class="d-flex justify-content-center"><input type="text" name="subId" hidden value="<%=submission.id%>"><button type="submit" class="fas fa-edit"></button></div>
@@ -190,15 +176,6 @@
 		</div>
 	<%} else {%>
 
-		<div class="container">
-
-		    <div class="jumbotron">
-			    <h1>Work Study Manager Dashboard</h1>
-			    <p>Hello <%=manager.name%>, you are looking at <%=currentPP%></p>
-		    </div>
-
-
-
 		    <div class="row">
 		    	<%submissions.forEach(function(submission, index){%>
 		    		<%interns.forEach(function(intern, indexIntern){%>
@@ -214,15 +191,15 @@
 						    					<div class="col-lg-12">
 							                      	<div class="row justify-content-end">
 							                      		<%if((15*(intern.submissions.length + 1) - intern.totalHours) > 0){%>
-							    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
-							    						<%} else {%>
-							    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be 0 to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+							    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
+								    					<%} else {%>
+						    								<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 							    						<%}%>
 						    			<%} else if(submission.total > 15){%>
 						    				<div id="ppdiv" class="row border rounded border-warning">
 						    					<div class="col-lg-12">
 							                      	<div class="row justify-content-end">
-									    				<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
+									    				<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeds Total hours worked on THIS Pay Period" data-content="This means the intern worked more than 15 hours on this Pay Period. Remember that each intern should work no more than 7.5 hours per week. However, this is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
 						    			<%} else {%>
 						    				<div id="ppdiv" class="row border border-success">
 						    					<div class="col-lg-12">
@@ -233,8 +210,8 @@
 								    			</div>
 
 								    			<!-- Inserts Image -->
-							                    <div class="p-1 col-lg-4 rounded justify-content-center border border-dark">
-						                    		<input type="image" name="profile" src="<%=intern.imagePath%>" form="<%=intern.id%>" id="profile_picture" class="d-inline-block align-top" alt="" loading="lazy">
+							                    <div class="p-1 col-lg-4 justify-content-center">
+						                    		<input type="image" name="profile" src="<%=intern.imagePath%>" form="<%=intern.id%>" id="profile_picture" class="d-inline-block border border-dark align-top" alt="" loading="lazy">
 							                    </div>
 
 							                    <!-- Continues with the rest of the card items -->
@@ -246,18 +223,18 @@
 							                          	</div>
 							                        	<div class="col-lg-4">
 							                        		<label class="my-1 mr-2" for="week1"><strong>Week 1</strong></label>
-													      	<input type="number" class="form-control col-md-12 mr-sm-1" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
+													      	<input type="number" class="form-control col-md-12 mr-sm-1 border border-dark" name="week1" min="0" step="0.01" id="week1" value="<%=submission.week1%>" required>
 													    </div>
 							                          	<div class="col-lg-4">
 							                          		<label class="my-1 mr-2" for="week2"><strong>Week 2</strong></label>
-													      	<input type="number" class="form-control col-md-12 mr-sm-1" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
+													      	<input type="number" class="form-control col-md-12 mr-sm-1 border border-dark" name="week2" min="0" step="0.01" id="week2" value="<%=submission.week2%>" required>
 							                          	</div>
 							                          	<div class="col-lg-4">
 							                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Unreported mean?" data-content="This represents any hours from previous pay periods that the intern or manager forgot to report or missed the deadline of, if any." class="my-1 mr-2" for="missed"><strong>Unreported</strong></label>
-														    <input type="number" min="0" class="form-control col-md-12 mr-sm-1" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
+														    <input type="number" min="0" class="form-control col-md-12 mr-sm-1 border border-dark" name="missed" step="0.01" id="missed" value="<%=submission.missed%>" required>
 							                          	</div>
 							                          	<div class="col-lg-4">
-							                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2." class="my-1 mr-2" for="total"><strong>Total</strong></label>
+							                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for THIS pay period only. It is the sum of Week 1, Week 2 and Unreported for THIS pay period ONLY." class="my-1 mr-2" for="total"><strong>Total</strong></label>
 														    <a name="total" id="total"><%=submission.total%> hrs</a>
 							                          	</div>
 							                          	<div class="col-lg-4">
@@ -265,7 +242,7 @@
 														    <a name="totalytd" id="totalytd"><%=intern.totalHours%> hrs</a>
 							                          	</div>
 							                          	<div class="col-lg-4">
-							                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does AverageYTD mean?" data-content="This variable indicates the average worked hours per week, as reported by the intern. It considers the total hours reported and the start date of the internship. This value should not be higher than 7.5 hrs/wk" class="my-1 mr-2" name="average" for="Average"><strong>AverageYTD</strong></label>
+							                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does AverageYTD mean?" data-content="This variable indicates the average worked hours per week for the entire Academic Year. It considers the total hours reported since the start date of the internship. This value SHOULD NOT be higher than 7.5 hrs/wk." class="my-1 mr-2" name="average" for="Average"><strong>AverageYTD</strong></label>
 														    <a name="average" id="average"><%=intern.average%> hrs/wk</a>
 							                          	</div>
 							                      	</div>
@@ -274,7 +251,7 @@
 							                    <div class="row col-md-12">
 								                    <div class="d-flex flex-column p-2 col-lg-9">
 								                      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
-														<textarea class="p-2" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
+														<textarea class="p-2 text-left" name="justification" id="justification" wrap="hard" maxlength='280' placeholder="Attended meetings. Sent emails..." required><%=submission.description%></textarea>
 								                    </div>
 								                    <div class="p-3 d-flex flex-column align-items-end mt-auto col-lg-3">
 								                    	<input type="text" name="subId" hidden value="<%=submission.id%>">
@@ -300,9 +277,9 @@
 					                      	<div class="row justify-content-end">
 					                      		<%if(intern.average > 7.5){%>
 								    				<%if((15*(intern.submissions.length + 1) - intern.totalHours) > 0){%>
-						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be <%=15*(intern.submissions.length + 1) - intern.totalHours%> to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 						    						<%} else {%>
-						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Average above expected" data-content="Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the next pay period should be 0 to correct this issue as soon as possible" class="p-1 badge badge-danger">Average</a>
+						    							<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Exceeded AverageYTD" data-content="This is the average number of hours worked per week for the entire Academic Year. Remember that each intern should, on average, work no more than 7.5 hours per week. The total worked hours for the upcoming pay period should be 0 to correct this issue as soon as possible." class="p-1 badge badge-danger">AverageYTD</a>
 						    						<%}%>
 								    			<%} else if(submission.total > 15){%>
 								    				<a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Total above expected" data-content="Remember that each intern should work no more than 7.5 hours per week. This is not an issue unless the AverageYTD is above 7.5 hrs/wk." class="p-1 badge badge-warning">Total</a>
@@ -317,8 +294,8 @@
 												<%};%>
 					                      	</div>
 					                    </div>
-					                    <div class="p-1 col-lg-4 rounded justify-content-center border border-dark">
-				                    		<input type="image" name="profile" src="<%=intern.imagePath%>" form="<%=intern.id%>" id="profile_picture" class="d-inline-block align-top" alt="" loading="lazy">
+					                    <div class="p-1 col-lg-4 justify-content-center">
+				                    		<input type="image" name="profile" src="<%=intern.imagePath%>" form="<%=intern.id%>" id="profile_picture" class="d-inline-block align-top border border-dark" alt="" loading="lazy">
 					                    </div>
 					                    <div class="col-lg-8">
 					                      	<div class="row">
@@ -338,7 +315,7 @@
 											      	<a id="missed" class="mr-sm-1"><%=submission.missed%> hrs</a>
 					                          	</div>
 					                          	<div class="p-1 col-lg-6">
-					                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for this pay period. It is the sum of Week 1 and Week 2."class="my-1 mr-2" for="total"><strong>Total</strong></label>
+					                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does Total mean?" data-content="This represents the total amount of hours reported for THIS pay period only. It is the sum of Week 1, Week 2 and Unreported for THIS pay period ONLY." class="my-1 mr-2" for="total"><strong>Total</strong></label>
 											      	<a id="totalSubmitted"><%=submission.week1 + submission.week2 +submission.missed%> hrs</a>
 					                          	</div>
 					                          	<div class="p-1 col-lg-6">
@@ -346,15 +323,15 @@
 											      	<a id="totalSubmitted"><%=intern.totalHours%> hrs</a>
 					                          	</div>
 					                          	<div class="p-1 col-lg-6">
-					                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does AverageYTD mean?" data-content="This variable indicates the average worked hours per week, as reported by the intern. It considers the total hours reported and the start date of the internship. This value should not be higher than 7.5 hrs/wk" class="my-1 mr-2" name="average" for="Average"><strong>AverageYTD</strong></label>
+					                          		<label tabindex="0" data-toggle="popover" data-trigger="focus" title="What does AverageYTD mean?" data-content="This variable indicates the average worked hours per week for the entire Academic Year. It considers the total hours reported since the start date of the internship. This value SHOULD NOT be higher than 7.5 hrs/wk." class="my-1 mr-2" name="average" for="Average"><strong>AverageYTD</strong></label>
 											      	<a id="totalSubmitted"><%=intern.average%> hrs/wk</a>
 					                          	</div>
 					                      	</div>
 					                  	</div>
 					                  	<div class="row col-md-12">
-						                  	<div class="d-flex flex-column p-2 col-md-6">
+						                  	<div class="d-flex text-wrap flex-column p-2 col-md-6">
 						                      	<label class="p-1 align-self-start" for="justification"><strong>Tasks Completed</strong></label>
-												<p class="p-2 flex-fill border border-dark" name="justification" id="justification" wrap="hard"> <%=submission.description%></p>
+												<p class="p-2 text-left flex-fill border border-dark" name="justification" id="justification" wrap="hard"> <%=submission.description%></p>
 											</div>
 											<div class="p-2 col-md-6 d-flex align-self-center flex-column">
 												<p class="align-self-end" id="dateSubmitted"><strong>Date Approved:</strong> <%=submission.dateApproved%></p>
@@ -371,20 +348,4 @@
 		</div>
 	<%}%>
 
-	<footer class="footer">
-	    <div>
-	       Copyright © Minerva Project, Inc. All Rights Reserved.&nbsp;&nbsp;&nbsp;
-	    </div>
-	    <div>
-	       <a id="mp-footer-terms" href="https://minerva.kgi.edu/terms/">Terms and Conditions</a> • <a id="mp-footer-privacy" href="https://minerva.kgi.edu/privacy/">Privacy Policy</a>
-	    </div>
-  	</footer>
-
-	<!-- <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="../js/dashboard.js"></script>
-</body>
-</html>
+<%- include("./partials/footer.ejs") %>
