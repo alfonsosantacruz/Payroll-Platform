@@ -33,7 +33,7 @@ router.get("/", isLoggedIn, function(req, res){
 });
 
 
-router.get("/schedule", isLoggedIn, async (req, res, next) => {
+router.get("/schedule", async (req, res, next) => {
 	var absoluteEmail = res.locals.email;
 	Manager.findOne({email: absoluteEmail}, async function(err, foundManager){
 		if(err) {
@@ -65,7 +65,6 @@ router.get("/schedule", isLoggedIn, async (req, res, next) => {
 		}
 	});
 });
-
 
 
 router.get("/submissions", isLoggedIn, function(req, res){
